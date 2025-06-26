@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Reset Password{% endblock %}
+{% block content %}
+<form method="POST" action="/reset-request" class="max-w-md mx-auto p-6 bg-white shadow rounded">
+  <h2 class="text-lg font-semibold text-indigo-700 mb-4">Reset Your Password</h2>
+  <input type="email" name="email" placeholder="Your registered email" required class="w-full border px-4 py-2 rounded mb-3">
+  <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded">Send Reset Link</button>
+</form>
+{% endblock %}

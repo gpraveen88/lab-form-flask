@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<form method="POST" action="/login" class="max-w-md mx-auto mt-6 p-6 bg-white shadow rounded">
+  <h2 class="text-xl font-bold mb-4 text-indigo-700">Login</h2>
+  <input name="email" type="email" placeholder="Email" required class="w-full border px-4 py-2 rounded mb-3">
+  <input name="password" type="password" placeholder="Password" required class="w-full border px-4 py-2 rounded mb-3">
+  <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded">Login</button>
+  <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded">Register here </button>
+</form>
+{% endblock %}

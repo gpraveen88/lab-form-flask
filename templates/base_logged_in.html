@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Dashboard{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        .nav-link {
+            position: relative;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: #3b82f6;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen flex flex-col">
+        <!-- Navigation Bar -->
+        <nav class="bg-white shadow-md sticky top-0 z-50">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between h-16">
+                    <div class="flex items-center">
+                        <img src="https://iith.ac.in/assets/images/logo.png" height="80" width="100"/>
+                        <span class="ml-4 text-xl font-bold text-gray-800">Department of Computer Science and Engineering</span>
+                    </div>
+                    <div class="hidden md:flex md:items-center md:space-x-2">
+                        <a href="/" class="nav-link text-gray-600 hover:text-blue-600 px-3 py-2 text-sm font-medium">Home</a>
+                        <a href="/cse_labs" class="nav-link text-gray-600 hover:text-blue-600 px-3 py-2 text-sm font-medium">CSE Labs</a>
+                        <a href="/index" class="nav-link text-gray-600 hover:text-blue-600 px-3 py-2 text-sm font-medium">Inventory</a>
+                        <a href="/search" class="nav-link text-gray-600 hover:text-blue-600 px-3 py-2 text-sm font-medium">Search</a>
+                        <a href="/utilization" class="nav-link text-gray-600 hover:text-blue-600 px-3 py-2 text-sm font-medium">Lab Utilization</a>
+                        <a href="/logout" class="nav-link text-gray-600 hover:text-blue-600 px-3 py-2 text-sm font-medium">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Flash Messages -->
+        <div class="container mx-auto mt-4">
+            {% with messages = get_flashed_messages() %}
+              {% if messages %}
+                <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative mb-4">
+                  {{ messages[0] }}
+                </div>
+              {% endif %}
+            {% endwith %}
+        </div>
+
+        <!-- Main Page Content -->
+        <main class="flex-grow">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+</body>
+</html>

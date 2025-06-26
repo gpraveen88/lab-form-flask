@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Approve Users{% endblock %}
+{% block content %}
+<div class="bg-white p-6 shadow rounded max-w-xl mx-auto">
+  <h2 class="text-lg font-semibold text-indigo-700 mb-4">Pending User Approvals</h2>
+  {% if users %}
+    <ul>
+    {% for user in users %}
+      <li class="mb-2 border-b pb-2">
+        {{ user.email }}
+        <a href="{{ url_for('approve_user', user_id=user.id) }}" class="text-green-600 ml-4">Approve</a>
+        <a href="{{ url_for('reject_user', user_id=user.id) }}" class="text-red-600 ml-2">Reject</a>
+      </li>
+    {% endfor %}
+    </ul>
+  {% else %}
+    <p>No pending users.</p>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Register{% endblock %}
+{% block content %}
+<form method="POST" action="/register" class="max-w-md mx-auto mt-6 p-6 bg-white shadow rounded">
+  <h2 class="text-xl font-bold mb-4 text-indigo-700">Register</h2>
+  <input name="email" type="email" placeholder="Your office email" required class="w-full border px-4 py-2 rounded mb-3">
+  <input name="password" type="password" placeholder="Password" required class="w-full border px-4 py-2 rounded mb-3">
+  <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded">Register</button>
+</form>
+{% endblock %}
