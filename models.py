@@ -1,6 +1,20 @@
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
+
 db = SQLAlchemy()
+
+
+class User(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(150), unique=True, nullable=False)
+    password = db.Column(db.String(150), nullable=False)
+
+    # NEW FIELDS FOR ADMIN AND RESET
+    is_approved = db.Column(db.Boolean, default=False)
+    reset_token = db.Column(db.String(100), nullable=True)
+    reset_token_expiry = db.Column(db.DateTime, nullable=True)
+
 
 class Workstation(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -48,15 +62,17 @@ class Workstation(db.Model):
 
 
 
-from flask_login import UserMixin
-from datetime import datetime
-
-class User(db.Model, UserMixin):
+class Equipment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(150), unique=True, nullable=False)
-    password = db.Column(db.String(150), nullable=False)
-
-    # NEW FIELDS FOR ADMIN AND RESET
-    is_approved = db.Column(db.Boolean, default=False)
-    reset_token = db.Column(db.String(100), nullable=True)
-    reset_token_expiry = db.Column(db.DateTime, nullable=True)
+    name = db.Column(db.String(100), nullable=False)
+    category = db.Column(db.String(50), nullable=False)
+    manufacturer = db.Column(db.String(100), nullable=False)
+    model = db.Column(db.String(100), nullable=False)
+    serial_number = db.Column(db.String(100), nullable=False)
+    location = db.Column(db.String(100), nullable=False)
+    purchase_date = db.Column(db.String(20), nullable=False)
+    status = db.Column(db.String(20), nullable=False)
+    po_date = db.Column(db.String(20), nullable=False)
+    intender_name = db.Column(db.String(100), nullable=False)
+    quantity = db.Column(db.Integer, nullable=False)
+    department_code = db.Column(db.String(100), unique=True, nullable=False)

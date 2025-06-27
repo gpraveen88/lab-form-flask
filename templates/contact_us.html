@@ -1,383 +1,127 @@
-
 {% extends "base.html" %}
-{% block title %}CSELABS - Home{% endblock %}
+{% block title %}Contact Us - CSE Labs{% endblock %}
 
 {% block content %}
 
-
-<!-- Department Contact Info -->
-<section class="bg-blue-50 py-12">
-    <div class="container mx-auto px-4">
-        <div class="bg-white rounded-lg shadow-lg p-8 max-w-4xl mx-auto">
-            <h3 class="text-2xl font-bold text-gray-800 mb-6">Department Contact Information</h3>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div>
-                    <div class="flex items-start mb-4">
-                        <div class="bg-blue-100 p-3 rounded-full mr-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                            </svg>
-                        </div>
-                        <div>
-                            <h4 class="font-semibold text-gray-800">Address</h4>
-                            <p class="text-gray-600">
-                                Department of Computer Science and Engineering<br>
-                                Indian Institute of Technology Hyderabad<br>
-                                Kandi, Sangareddy<br>
-                                Telangana - 502285
-                            </p>
-                        </div>
-                    </div>
-                    
-                    <div class="flex items-start">
-                        <div class="bg-blue-100 p-3 rounded-full mr-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                            </svg>
-                        </div>
-                        <div>
-                            <h4 class="font-semibold text-gray-800">Email</h4>
-                            <p class="text-gray-600">office.cse@iith.ac.in</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div>
-                    <div class="flex items-start mb-4">
-                        <div class="bg-blue-100 p-3 rounded-full mr-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                            </svg>
-                        </div>
-                        <div>
-                            <h4 class="font-semibold text-gray-800">Phone</h4>
-                            <p class="text-gray-600">+91 40 2301 6362</p>
-                        </div>
-                    </div>
-                    
-                    <div class="flex items-start">
-                        <div class="bg-blue-100 p-3 rounded-full mr-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                        </div>
-                        <div>
-                            <h4 class="font-semibold text-gray-800">Office Hours</h4>
-                            <p class="text-gray-600">Monday - Friday: 9:00 AM - 5:00 PM</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+<!-- Contact Header -->
+<section class="bg-gradient-to-r from-blue-100 to-indigo-100 py-12">
+  <div class="container mx-auto text-center px-4">
+    <h2 class="text-4xl font-extrabold text-gray-800 mb-4">Contact the Department</h2>
+    <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+      Have questions about labs, staff, or general support? We're here to help you.
+    </p>
+  </div>
 </section>
+
+<!-- Department Contact Card -->
+<section class="py-12 bg-white">
+  <div class="container mx-auto px-4">
+    <div class="max-w-5xl mx-auto bg-white shadow-xl rounded-lg overflow-hidden md:flex">
+      <div class="md:w-1/2 bg-blue-50 p-8">
+        <h3 class="text-2xl font-bold text-gray-800 mb-4">Department Contact</h3>
+        <p class="text-gray-700 mb-4">
+          <strong>Address:</strong><br>
+          Department of Computer Science & Engineering,<br>
+          Indian Institute of Technology Hyderabad,<br>
+          Kandi, Sangareddy, Telangana - 502285
+        </p>
+        <p class="text-gray-700 mb-2">
+          <strong>Email:</strong> <a href="mailto:office.cse@iith.ac.in" class="text-blue-600 hover:underline">office.cse@iith.ac.in</a>
+        </p>
+        <p class="text-gray-700">
+          <strong>Phone:</strong> <a href="tel:+914023016362" class="text-blue-600 hover:underline">+91-40-2301 6362</a>
+        </p>
+      </div>
+      <div class="md:w-1/2 bg-white p-8 border-t md:border-t-0 md:border-l">
+        <h3 class="text-2xl font-bold text-gray-800 mb-4">Office Hours</h3>
+        <p class="text-gray-700 mb-2">
+          <strong>Working Days:</strong> Monday to Friday
+        </p>
+        <p class="text-gray-700 mb-2">
+          <strong>Timings:</strong> 9:00 AM to 5:00 PM
+        </p>
+        <p class="text-gray-700">
+          <strong>Closed on:</strong> Weekends & Public Holidays
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
 
 <!-- Staff Directory -->
-<section class="py-16 bg-white">
+<section class="bg-gray-50 py-12">
+  <div class="container mx-auto px-4">
+    <h2 class="text-3xl font-bold text-center text-gray-800 mb-10">Department Staff</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+
+      <!-- Staff Card -->
+      <div class="bg-white shadow rounded-lg p-6 text-center">
+        <h3 class="text-xl font-bold text-gray-800">Mr. N. Syamala Rao</h3>
+        <p class="text-blue-600">Senior Technical Superintendent</p>
+        <p class="text-gray-600 text-sm">Email: syamala@cse.iith.ac.in</p>
+      </div>
+
+      <div class="bg-white shadow rounded-lg p-6 text-center">
+        <h3 class="text-xl font-bold text-gray-800">Mr. T. Vijayachakravarthi</h3>
+        <p class="text-blue-600">Senior Technical Superintendent</p>
+        <p class="text-gray-600 text-sm">Email: vijayachakravarthi@cse.iith.ac.in</p>
+      </div>
+
+      <div class="bg-white shadow rounded-lg p-6 text-center">
+        <h3 class="text-xl font-bold text-gray-800">Mr. Nikith Reddy Peddasheri</h3>
+        <p class="text-blue-600">Technician</p>
+        <p class="text-gray-600 text-sm">Email: nikith@cse.iith.ac.in</p>
+      </div>
+
+      <div class="bg-white shadow rounded-lg p-6 text-center">
+        <h3 class="text-xl font-bold text-gray-800">Ms. Sunitha Maloth</h3>
+        <p class="text-blue-600">Technician</p>
+        <p class="text-gray-600 text-sm">Email: sunitham@cse.iith.ac.in</p>
+      </div>
+
+      <div class="bg-white shadow rounded-lg p-6 text-center">
+        <h3 class="text-xl font-bold text-gray-800">Mr. Gaddam Praveen Kumar</h3>
+        <p class="text-blue-600">Junior Technician</p>
+        <p class="text-gray-600 text-sm">Email: praveenk@cse.iith.ac.in</p>
+      </div>
+
+      <div class="bg-white shadow rounded-lg p-6 text-center">
+        <h3 class="text-xl font-bold text-gray-800">Mr. Shiva Kumar Reddy</h3>
+        <p class="text-blue-600">Junior Technician</p>
+        <p class="text-gray-600 text-sm">Email: shivak@cse.iith.ac.in</p>
+      </div>
+
+      <div class="bg-white shadow rounded-lg p-6 text-center">
+        <h3 class="text-xl font-bold text-gray-800">Mr. Kiran Kumar Kavali</h3>
+        <p class="text-blue-600">Junior Technician</p>
+        <p class="text-gray-600 text-sm">Email: kirank@cse.iith.ac.in</p>
+      </div>
+
+      <!-- Admin Staff -->
+      <div class="bg-white shadow rounded-lg p-6 text-center">
+        <h3 class="text-xl font-bold text-gray-800">Mr. Gandepalli Surya Prakash</h3>
+        <p class="text-blue-600">Assistant</p>
+        <p class="text-gray-600 text-sm">Email: suryap@cse.iith.ac.in</p>
+      </div>
+
+      <div class="bg-white shadow rounded-lg p-6 text-center">
+        <h3 class="text-xl font-bold text-gray-800">Ms. Hannah Daisy</h3>
+        <p class="text-blue-600">Junior Assistant</p>
+        <p class="text-gray-600 text-sm">Email: hannahd@cse.iith.ac.in</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Map Placeholder -->
+<section class="py-12">
     <div class="container mx-auto px-4">
-        <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">Our Staff</h2>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- Staff Member 1 -->
-            <div class="staff-card bg-white rounded-lg overflow-hidden shadow-md">
-                <div class="bg-blue-50 p-6 flex justify-center">
-                    <svg class="w-32 h-32 text-blue-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="12" cy="7" r="4"></circle>
-                    </svg>
-                </div>
-                <div class="p-6">
-                    <h3 class="text-xl font-bold text-gray-800">Mr. Srinivas Reddy</h3>
-                    <p class="text-blue-600 font-medium mb-2">Junior Technical Superintendent</p>
-                    <div class="flex items-center text-gray-600 mb-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                        </svg>
-                        <span>srinivas@cse.iith.ac.in</span>
-                    </div>
-                    <div class="flex items-center text-gray-600">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                        </svg>
-                        <span>+91 40 2301 6362</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Staff Member 2 -->
-            <div class="staff-card bg-white rounded-lg overflow-hidden shadow-md">
-                <div class="bg-blue-50 p-6 flex justify-center">
-                    <svg class="w-32 h-32 text-blue-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="12" cy="7" r="4"></circle>
-                    </svg>
-                </div>
-                <div class="p-6">
-                    <h3 class="text-xl font-bold text-gray-800">Mr. Srinivas</h3>
-                    <p class="text-blue-600 font-medium mb-2">Junior Technician</p>
-                    <div class="flex items-center text-gray-600 mb-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                        </svg>
-                        <span>srinu@cse.iith.ac.in</span>
-                    </div>
-                    <div class="flex items-center text-gray-600">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                        </svg>
-                        <span>+91 40 2301 6363</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Staff Member 3 -->
-            <div class="staff-card bg-white rounded-lg overflow-hidden shadow-md">
-                <div class="bg-blue-50 p-6 flex justify-center">
-                    <svg class="w-32 h-32 text-blue-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="12" cy="7" r="4"></circle>
-                    </svg>
-                </div>
-                <div class="p-6">
-                    <h3 class="text-xl font-bold text-gray-800">Ms. Swapna</h3>
-                    <p class="text-blue-600 font-medium mb-2">Junior Assistant</p>
-                    <div class="flex items-center text-gray-600 mb-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                        </svg>
-                        <span>swapna@cse.iith.ac.in</span>
-                    </div>
-                    <div class="flex items-center text-gray-600">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                        </svg>
-                        <span>+91 40 2301 6364</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Staff Member 4 -->
-            <div class="staff-card bg-white rounded-lg overflow-hidden shadow-md">
-                <div class="bg-blue-50 p-6 flex justify-center">
-                    <svg class="w-32 h-32 text-blue-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="12" cy="7" r="4"></circle>
-                    </svg>
-                </div>
-                <div class="p-6">
-                    <h3 class="text-xl font-bold text-gray-800">Mr. Raju</h3>
-                    <p class="text-blue-600 font-medium mb-2">Junior Attendant</p>
-                    <div class="flex items-center text-gray-600 mb-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                        </svg>
-                        <span>raju@cse.iith.ac.in</span>
-                    </div>
-                    <div class="flex items-center text-gray-600">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                        </svg>
-                        <span>+91 40 2301 6365</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Staff Member 5 -->
-            <div class="staff-card bg-white rounded-lg overflow-hidden shadow-md">
-                <div class="bg-blue-50 p-6 flex justify-center">
-                    <svg class="w-32 h-32 text-blue-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="12" cy="7" r="4"></circle>
-                    </svg>
-                </div>
-                <div class="p-6">
-                    <h3 class="text-xl font-bold text-gray-800">Ms. Lakshmi</h3>
-                    <p class="text-blue-600 font-medium mb-2">Administrative Assistant</p>
-                    <div class="flex items-center text-gray-600 mb-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                        </svg>
-                        <span>lakshmi@cse.iith.ac.in</span>
-                    </div>
-                    <div class="flex items-center text-gray-600">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                        </svg>
-                        <span>+91 40 2301 6366</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Staff Member 6 -->
-            <div class="staff-card bg-white rounded-lg overflow-hidden shadow-md">
-                <div class="bg-blue-50 p-6 flex justify-center">
-                    <svg class="w-32 h-32 text-blue-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="12" cy="7" r="4"></circle>
-                    </svg>
-                </div>
-                <div class="p-6">
-                    <h3 class="text-xl font-bold text-gray-800">Mr. Venkat</h3>
-                    <p class="text-blue-600 font-medium mb-2">Lab Assistant</p>
-                    <div class="flex items-center text-gray-600 mb-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                        </svg>
-                        <span>venkat@cse.iith.ac.in</span>
-                    </div>
-                    <div class="flex items-center text-gray-600">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                        </svg>
-                        <span>+91 40 2301 6367</span>
-                    </div>
-                </div>
-            </div>
+        <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+            <iframe class="w-full h-96" src="https://maps.google.com/maps?q=IIT%20Hyderabad&t=&z=13&ie=UTF8&iwloc=&output=embed" frameborder="0" allowfullscreen></iframe>
         </div>
     </div>
 </section>
 
-<!-- Contact Form Section -->
-<section class="py-16 bg-gray-50">
-    <div class="container mx-auto px-4">
-        <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
-            <div class="md:flex">
-                <div class="md:w-1/2 bg-blue-600 text-white p-8">
-                    <h3 class="text-2xl font-bold mb-4">Get In Touch</h3>
-                    <p class="mb-6">Have questions about our department? Fill out the form and we'll get back to you as soon as possible.</p>
-                    
-                    <div class="flex items-center mb-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                        </svg>
-                        <span>IIT Hyderabad, Kandi, Sangareddy, Telangana - 502285</span>
-                    </div>
-                    
-                    <div class="flex items-center mb-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                        </svg>
-                        <span>office.cse@iith.ac.in</span>
-                    </div>
-                    
-                    <div class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                        </svg>
-                        <span>+91 40 2301 6362</span>
-                    </div>
-                </div>
-                
-                <div class="md:w-1/2 p-8">
-                    <h3 class="text-2xl font-bold text-gray-800 mb-6">Send us a message</h3>
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="name">Name</label>
-                        <input class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name" type="text" placeholder="Your Name">
-                    </div>
-                    
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="email">Email</label>
-                        <input class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email" type="email" placeholder="Your Email">
-                    </div>
-                    
-                    <div class="mb-6">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="message">Message</label>
-                        <textarea class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="message" rows="4" placeholder="Your Message"></textarea>
-                    </div>
-                    
-                    <div class="flex items-center justify-between">
-                        <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline transition" type="button">
-                            Send Message
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Map Section -->
-<section class="py-16 bg-white">
-    <div class="container mx-auto px-4">
-        <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">Find Us</h2>
-        <div class="max-w-5xl mx-auto h-96 bg-gray-200 rounded-lg overflow-hidden shadow-lg">
-            <!-- Map placeholder - In a real implementation, you would embed an actual map here -->
-            <div class="w-full h-full flex items-center justify-center bg-blue-50">
-                <div class="text-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-blue-600 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                    <h3 class="text-xl font-bold text-gray-800">IIT Hyderabad Campus</h3>
-                    <p class="text-gray-600">Kandi, Sangareddy, Telangana - 502285</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Footer -->
-<footer class="bg-gray-800 text-white py-12">
-    <div class="container mx-auto px-4">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div>
-                <h4 class="text-xl font-bold mb-4">About CSE IITH</h4>
-                <p class="text-gray-300">
-                    The Department of Computer Science and Engineering at IIT Hyderabad offers undergraduate, postgraduate and doctoral programs in Computer Science and Engineering.
-                </p>
-            </div>
-            
-            <div>
-                <h4 class="text-xl font-bold mb-4">Quick Links</h4>
-                <ul class="space-y-2">
-                    <li><a href="#" class="text-gray-300 hover:text-white transition">Home</a></li>
-                    <li><a href="#" class="text-gray-300 hover:text-white transition">About</a></li>
-                    <li><a href="#" class="text-gray-300 hover:text-white transition">Programs</a></li>
-                    <li><a href="#" class="text-gray-300 hover:text-white transition">Research</a></li>
-                    <li><a href="#" class="text-gray-300 hover:text-white transition">Contact</a></li>
-                </ul>
-            </div>
-            
-            <div>
-                <h4 class="text-xl font-bold mb-4">Connect With Us</h4>
-                <div class="flex space-x-4 mb-4">
-                    <a href="#" class="bg-blue-600 hover:bg-blue-700 h-10 w-10 rounded-full flex items-center justify-center transition">
-                        <svg class="h-5 w-5 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/>
-                        </svg>
-                    </a>
-                    <a href="#" class="bg-blue-400 hover:bg-blue-500 h-10 w-10 rounded-full flex items-center justify-center transition">
-                        <svg class="h-5 w-5 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
-                        </svg>
-                    </a>
-                    <a href="#" class="bg-red-600 hover:bg-red-700 h-10 w-10 rounded-full flex items-center justify-center transition">
-                        <svg class="h-5 w-5 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M7 11v2.4h3.97c-.16 1.029-1.2 3.02-3.97 3.02-2.39 0-4.34-1.979-4.34-4.42 0-2.44 1.95-4.42 4.34-4.42 1.36 0 2.27.58 2.79 1.08l1.9-1.83c-1.22-1.14-2.8-1.83-4.69-1.83-3.87 0-7 3.13-7 7s3.13 7 7 7c4.04 0 6.721-2.84 6.721-6.84 0-.46-.051-.81-.111-1.16h-6.61zm0 0 17 2h-3v3h-2v-3h-3v-2h3v-3h2v3h3v2z" fill-rule="evenodd" clip-rule="evenodd"/>
-                        </svg>
-                    </a>
-                    <a href="#" class="bg-blue-800 hover:bg-blue-900 h-10 w-10 rounded-full flex items-center justify-center transition">
-                        <svg class="h-5 w-5 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M4.98 3.5c0 1.381-1.11 2.5-2.48 2.5s-2.48-1.119-2.48-2.5c0-1.38 1.11-2.5 2.48-2.5s2.48 1.12 2.48 2.5zm.02 4.5h-5v16h5v-16zm7.982 0h-4.968v16h4.969v-8.399c0-4.67 6.029-5.052 6.029 0v8.399h4.988v-10.131c0-7.88-8.922-7.593-11.018-3.714v-2.155z"/>
-                        </svg>
-                    </a>
-                </div>
-                <p class="text-gray-300">Subscribe to our newsletter</p>
-                <div class="flex mt-2">
-                    <input type="email" placeholder="Your email" class="px-4 py-2 w-full rounded-l focus:outline-none text-gray-800">
-                    <button class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-r transition">
-                        Subscribe
-                    </button>
-                </div>
-            </div>
-        </div>
-        
-        <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-300">
-            <p>&copy; 2023 Department of Computer Science and Engineering, IIT Hyderabad. All rights reserved.</p>
-        </div>
-    </div>
-</footer>
 {% endblock %}

@@ -2,11 +2,34 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
-<form method="POST" action="/login" class="max-w-md mx-auto mt-6 p-6 bg-white shadow rounded">
-  <h2 class="text-xl font-bold mb-4 text-indigo-700">Login</h2>
-  <input name="email" type="email" placeholder="Email" required class="w-full border px-4 py-2 rounded mb-3">
-  <input name="password" type="password" placeholder="Password" required class="w-full border px-4 py-2 rounded mb-3">
-  <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded">Login</button>
-  <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded">Register here </button>
-</form>
+<div class="py-16 bg-yellow-100 min-h-screen">
+  <div class="max-w-md mx-auto bg-white shadow-md rounded-lg p-8">
+    <h2 class="text-2xl font-bold text-indigo-700 text-center mb-6">Login</h2>
+    
+    <form method="POST" action="/login" class="space-y-4">
+      <div>
+        <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+        <input name="email" type="email" placeholder="Enter your email" required
+               class="mt-1 w-full border border-gray-300 px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400">
+      </div>
+
+      <div>
+        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+        <input name="password" type="password" placeholder="Enter your password" required
+               class="mt-1 w-full border border-gray-300 px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400">
+      </div>
+
+      <div class="flex justify-between items-center mt-6">
+        <button type="submit"
+                class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded shadow transition duration-300">
+          Login
+        </button>
+        <a href="/register"
+           class="text-sm text-blue-600 hover:underline font-medium">
+          Register here
+        </a>
+      </div>
+    </form>
+  </div>
+</div>
 {% endblock %}

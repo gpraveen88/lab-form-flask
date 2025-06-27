@@ -2,14 +2,15 @@ from flask_login import LoginManager, UserMixin, login_user, logout_user, login_
 from flask import redirect, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import Flask, render_template, request
-from models import db, Workstation
+from models import db, User, Workstation, Equipment
+import pandas as pd
+
 import requests
 import os
 from collections import defaultdict
 from werkzeug.security import check_password_hash
-
-
-
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 from datetime import datetime, timedelta
 import secrets
 from flask import flash, redirect, url_for
@@ -19,13 +20,17 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'database.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
-
 app.secret_key = "PPPAAA@RRRTTT"
+
+
+#db = SQLAlchemy(app)
+migrate = Migrate(app, db)
+
 
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
-
+from models import Workstation, Equipment
 from models import User
 
 @login_manager.user_loader
@@ -347,6 +352,103 @@ from flask_login import login_required, current_user
 @login_required
 def inventory():
     return render_template("inventory.html", layout="login_home.html")
+
+@app.route("/equipment_entry", methods=["GET", "POST"])
+@login_required
+def equipment_entry():
+    if request.method == "POST":
+        form = request.form
+        name = form["name"]
+        category = form["category"]
+        manufacturer = form["manufacturer"]
+        model = form["model"]
+        serial_number = form["serial_number"]
+        location = form["location"]
+        purchase_date = form["purchase_date"]
+        status = form["status"]
+        po_date = form["po_date"]
+        intender_name = form["intender_name"]
+        quantity = int(form["quantity"])
+
+        # 🧠 Generate Department Unique Code
+        today_str = datetime.now().strftime("%Y%m%d")
+        prefix = f"CSE/{today_str}/{category}"
+        existing = Equipment.query.filter(Equipment.department_code.like(f"{prefix}/%")).count()
+        department_code = f"{prefix}/{str(existing + 1).zfill(3)}"
+
+        # ✅ Save to DB
+        new_equipment = Equipment(
+            name=name,
+            category=category,
+            manufacturer=manufacturer,
+            model=model,
+            serial_number=serial_number,
+            location=location,
+            purchase_date=purchase_date,
+            status=status,
+            po_date=po_date,
+            intender_name=intender_name,
+            quantity=quantity,
+            department_code=department_code
+        )
+
+        db.session.add(new_equipment)
+        db.session.commit()
+        flash(f"✅ Equipment added. Code: {department_code}")
+        return redirect(url_for("equipment_entry"))
+
+    return render_template("equipment_entry.html", layout="login_home.html")
+
+from flask import send_file
+import pandas as pd
+from io import BytesIO
+from models import Equipment
+
+@app.route("/equipment_list", methods=["GET"])
+@login_required
+def equipment_list():
+    query = Equipment.query.all()
+    return render_template("equipment_list.html", equipment=query)
+
+from flask import make_response
+import pandas as pd
+import io
+
+@app.route("/export_equipment/<file_format>")
+@login_required
+def export_equipment(file_format):
+    equipment = Equipment.query.all()
+    
+    data = [{
+        "Department Code": eq.department_code,
+        "PO Date": eq.po_date,
+        "Intender Name": eq.intender_name,
+        "Category": eq.category,
+        "Status": eq.status,
+        "Quantity": eq.quantity,
+        "Remarks": eq.remarks,
+        "Created At": eq.created_at.strftime("%Y-%m-%d %H:%M:%S")
+    } for eq in equipment]
+
+    df = pd.DataFrame(data)
+
+    if file_format == "excel":
+        output = io.BytesIO()
+        with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
+            df.to_excel(writer, index=False, sheet_name="Equipment")
+        output.seek(0)
+        return send_file(output, download_name="equipment_list.xlsx", as_attachment=True)
+
+    elif file_format == "pdf":
+        html = df.to_html(index=False)
+        # Optional: convert to PDF using xhtml2pdf or similar if needed
+        response = make_response(html)
+        response.headers["Content-Disposition"] = "attachment; filename=equipment_list.html"
+        response.headers["Content-Type"] = "text/html"
+        return response
+
+    else:
+        return "❌ Unsupported file format", 400
 
 if __name__ == "__main__":
     app.run(debug=True, port=5009)
