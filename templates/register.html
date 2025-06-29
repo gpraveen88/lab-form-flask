@@ -2,35 +2,143 @@
 {% block title %}Register{% endblock %}
 
 {% block content %}
-<div class="py-16 bg-yellow-100 min-h-screen">
-  <div class="max-w-md mx-auto bg-white shadow-md rounded-lg p-8">
-    <h2 class="text-2xl font-bold text-indigo-700 text-center mb-6">Register</h2>
+<style>
+  .register-background {
+    background: linear-gradient(135deg, #a1c4fd, #c2e9fb);
+    min-height: 100vh;
+    padding-top: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
-    <form method="POST" action="/register" class="space-y-4">
-      <div>
-        <label for="email" class="block text-sm font-medium text-gray-700">Office Email</label>
-        <input name="email" type="email" placeholder="Enter your office email" required
-               class="mt-1 w-full border border-gray-300 px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400">
-      </div>
+  .register-container {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 1000px;
+    width: 100%;
+    padding: 2rem;
+  }
 
-      <div>
-        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-        <input name="password" type="password" placeholder="Choose a password" required
-               class="mt-1 w-full border border-gray-300 px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400">
-      </div>
+  .glass-card {
+    backdrop-filter: blur(12px);
+    background: rgba(255, 255, 255, 0.75);
+    border-radius: 1rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 400px;
+    color: #333;
+  }
 
-      <div class="mt-6">
-        <button type="submit"
-                class="w-full bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded shadow transition duration-300">
-          Register
-        </button>
-      </div>
+  .glass-card h2 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    text-align: center;
+    color: #4f46e5;
+  }
 
-      <div class="text-center mt-4 text-sm text-gray-600">
-        Already have an account?
-        <a href="/login" class="text-blue-600 hover:underline font-medium">Login here</a>
+  .glass-card p {
+    font-size: 0.95rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #555;
+  }
+
+  .form-group {
+    margin-bottom: 1.25rem;
+  }
+
+  .form-group input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    background: rgba(255, 255, 255, 0.95);
+    color: #333;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+  }
+
+  .form-group input:focus {
+    outline: none;
+    border-color: #4f46e5;
+    background: rgba(255, 255, 255, 0.6);
+  }
+
+  .register-btn {
+    width: 100%;
+    padding: 0.75rem;
+    background: #4f46e5;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+
+  .register-btn:hover {
+    background: #4338ca;
+  }
+
+  .login-text {
+    font-size: 0.875rem;
+    text-align: center;
+    margin-top: 1.5rem;
+    color: #4f46e5;
+  }
+
+  .login-text a {
+    color: #4f46e5;
+    font-weight: 500;
+    text-decoration: underline;
+  }
+
+  .register-image {
+    max-width: 400px;
+    width: 100%;
+  }
+
+  @media (max-width: 768px) {
+    .register-container {
+      flex-direction: column;
+    }
+
+    .register-image {
+      max-width: 300px;
+    }
+  }
+</style>
+
+<div class="register-background">
+  <div class="register-container">
+    <!-- Optional Register Illustration -->
+    <img src="{{ url_for('static', filename='images/Signup1.png') }}" alt="Register illustration" class="register-image">
+
+    <!-- Register Card -->
+    <div class="glass-card">
+      <h2>Create Your Account</h2>
+      <p>Register with your official email to continue</p>
+
+      <form method="POST" action="/register">
+        <div class="form-group">
+          <input name="email" type="email" placeholder="Enter your office email" required>
+        </div>
+        <div class="form-group">
+          <input name="password" type="password" placeholder="Choose a password" required>
+        </div>
+        <button type="submit" class="register-btn">Register</button>
+      </form>
+
+      <div class="login-text">
+        Already have an account? <a href="/login">Login here</a>
       </div>
-    </form>
+    </div>
   </div>
 </div>
 {% endblock %}

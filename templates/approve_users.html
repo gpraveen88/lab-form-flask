@@ -1,20 +1,105 @@
-{% extends "base.html" %}
+{% extends "login_home.html" %}
 {% block title %}Approve Users{% endblock %}
+
 {% block content %}
-<div class="bg-white p-6 shadow rounded max-w-xl mx-auto">
-  <h2 class="text-lg font-semibold text-indigo-700 mb-4">Pending User Approvals</h2>
-  {% if users %}
-    <ul>
-    {% for user in users %}
-      <li class="mb-2 border-b pb-2">
-        {{ user.email }}
-        <a href="{{ url_for('approve_user', user_id=user.id) }}" class="text-green-600 ml-4">Approve</a>
-        <a href="{{ url_for('reject_user', user_id=user.id) }}" class="text-red-600 ml-2">Reject</a>
-      </li>
-    {% endfor %}
-    </ul>
-  {% else %}
-    <p>No pending users.</p>
-  {% endif %}
+<style>
+  .approve-bg {
+    background: linear-gradient(135deg, #f0f4ff, #e0e7ff);
+    min-height: 100vh;
+    padding-top: 4rem;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  .approve-card {
+    backdrop-filter: blur(12px);
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 1rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    width: 100%;
+    margin: 2rem;
+    padding: 2rem;
+  }
+
+  .approve-card h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #4f46e5;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  .user-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .user-item:last-child {
+    border-bottom: none;
+  }
+
+  .user-email {
+    font-weight: 500;
+    color: #374151;
+  }
+
+  .approve-actions a {
+    padding: 0.4rem 0.8rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: background 0.2s;
+    text-decoration: none;
+  }
+
+  .approve-link {
+    background-color: #10b981;
+    color: white;
+    margin-right: 0.5rem;
+  }
+
+  .approve-link:hover {
+    background-color: #059669;
+  }
+
+  .reject-link {
+    background-color: #ef4444;
+    color: white;
+  }
+
+  .reject-link:hover {
+    background-color: #dc2626;
+  }
+
+  .no-users {
+    text-align: center;
+    color: #6b7280;
+    font-size: 0.95rem;
+  }
+</style>
+
+<div class="approve-bg">
+  <div class="approve-card">
+    <h2>Pending User Approvals</h2>
+
+    {% if users %}
+      {% for user in users %}
+        <div class="user-item">
+          <div class="user-email">{{ user.email }}</div>
+          <div class="approve-actions">
+            <a href="{{ url_for('approve_user', user_id=user.id) }}" class="approve-link">Approve</a>
+            <a href="{{ url_for('reject_user', user_id=user.id) }}" class="reject-link">Reject</a>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p class="no-users">🎉 No pending users to approve.</p>
+    {% endif %}
+  </div>
 </div>
 {% endblock %}

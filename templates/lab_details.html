@@ -1,0 +1,84 @@
+{% extends "login_home.html" %}
+{% block title %}{{ lab_code }} Details{% endblock %}
+
+{% block content %}
+<!-- <section class="bg-gradient-to-r from-sky-100 to-indigo-100 py-12">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="text-center mb-10">
+      <h1 class="text-4xl font-bold text-indigo-800 drop-shadow-md">{{ lab_code }} Laboratory</h1>
+      <p class="text-gray-700 mt-2 text-lg">Comprehensive details of lab infrastructure and usage</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center bg-white rounded-lg shadow-lg p-6">
+      
+       <!-- Image Section --> 
+      <!-- <div class="flex justify-center">
+        <img src="{{ url_for('static', filename='mylab/' ~ lab_code ~ '.jpg') }}"
+             alt="{{ lab_code }} Lab Image"
+             class="rounded-lg shadow-md border border-gray-300 w-full max-w-md hover:scale-105 transition duration-300"
+             style="max-height: 350px;">
+      </div> -->
+
+      <!-- Lab Info Section -->
+      <!-- <div>
+        <div class="space-y-4">
+          <h2 class="text-2xl font-bold text-indigo-700 border-b pb-2">Lab Overview</h2>
+          <div class="text-gray-800 text-base leading-relaxed space-y-2">
+            <p><span class="font-semibold text-gray-600">Total Capacity:</span> {{ capacity }}</p>
+            <p><span class="font-semibold text-gray-600">Available Seating:</span> {{ available_seating }}</p>
+            <p><span class="font-semibold text-gray-600">Used Seating:</span> {{ used_seating }}</p>
+            <p><span class="font-semibold text-gray-600">Faculty In-Charge:</span> {{ faculty }}</p>
+            <p><span class="font-semibold text-gray-600">Meeting Rooms:</span> {{ meeting_rooms }}</p>
+          </div>
+
+          <a href="/cse_labs"
+             class="inline-block mt-6 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded shadow transition">
+            ← Back to Labs
+          </a>
+        </div>
+      </div>
+    </div>
+  </div> -->
+<!-- </section>  -->
+
+<section class="bg-gradient-to-r from-sky-100 to-indigo-100 py-12">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="text-center mb-10">
+      <h1 class="text-4xl font-bold text-indigo-800 drop-shadow-md">{{ lab_code }} Laboratory</h1>
+      <p class="text-gray-700 mt-2 text-lg">Comprehensive details of lab infrastructure and usage</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center bg-white rounded-lg shadow-lg p-6">
+      
+      <!-- Image Section -->
+      <div class="flex justify-center">
+        <img src="{{ url_for('static', filename='mylab/' ~ lab_code ~ '.jpg') }}"
+             alt="{{ lab_code }} Lab Image"
+             class="rounded-lg shadow-md border border-gray-300 w-full max-w-md hover:scale-105 transition duration-300"
+             style="max-height: 350px;">
+      </div>
+
+      <!-- Lab Info Section -->
+      <div>
+        <div class="space-y-4">
+          <h2 class="text-2xl font-bold text-indigo-700 border-b pb-2">Lab Overview</h2>
+          <div class="text-gray-800 text-base leading-relaxed space-y-2">
+            <p><span class="font-semibold text-gray-600">Total Capacity:</span> {{ capacity }}</p>
+            <p><span class="font-semibold text-gray-600">Available Seating:</span> {{ available_seating }}</p>
+            <p><span class="font-semibold text-gray-600">Used Seating:</span> {{ used_seating }}</p>
+            <p><span class="font-semibold text-gray-600">Faculty In-Charge:</span> {{ faculty }}</p>
+            <p><span class="font-semibold text-gray-600">Meeting Rooms:</span> {{ meeting_rooms }}</p>
+          </div>
+
+          <a href="/cse_labs"
+             class="inline-block mt-6 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded shadow transition">
+            ← Back to Labs
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+{% endblock %}

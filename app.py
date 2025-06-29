@@ -264,7 +264,7 @@ def login():
 @login_required
 def logout():
     logout_user()
-    flash("You have been logged out.")
+    #flash("You have been logged out.")
     return redirect(url_for("login"))
 
 
@@ -450,5 +450,138 @@ def export_equipment(file_format):
     else:
         return "❌ Unsupported file format", 400
 
+# Static metadata for labs
+lab_meta = {
+    "CS-107": {"faculty": "Dr. A. Sharma", "meeting_rooms": 2, "capacity": 43, "image": "mylab/cs107.jpg"},
+    "CS-108": {"faculty": "Dr. B. Rao", "meeting_rooms": 1, "capacity": 21, "image": "mylab/cs108.jpg"},
+    "CS-109": {"faculty": "Dr. C. Iyer", "meeting_rooms": 1, "capacity": 114, "image": "mylab/cs109.jpg"},
+    "CS-207": {"faculty": "Dr. D. Gupta", "meeting_rooms": 1, "capacity": 30, "image": "mylab/cs207.jpg"},
+    "CS-208": {"faculty": "Dr. E. Nair", "meeting_rooms": 1, "capacity": 25, "image": "mylab/cs208.jpg"},
+    "CS-209": {"faculty": "Dr. F. Singh", "meeting_rooms": 2, "capacity": 142, "image": "mylab/cs209.jpg"},
+    "CS-317": {"faculty": "Dr. G. Patil", "meeting_rooms": 1, "capacity": 25, "image": "mylab/cs317.jpg"},
+    "CS-318": {"faculty": "Dr. H. Bose", "meeting_rooms": 1, "capacity": 25, "image": "mylab/cs318.jpg"},
+    "CS-319": {"faculty": "Dr. I. Rao", "meeting_rooms": 1, "capacity": 32, "image": "mylab/cs319.jpg"},
+    "CS-320": {"faculty": "Dr. J. Varma", "meeting_rooms": 1, "capacity": 27, "image": "mylab/cs320.jpg"},
+    "CS-411": {"faculty": "Dr. K. Desai", "meeting_rooms": 1, "capacity": 25, "image": "mylab/cs411.jpg"},
+    "CS-412": {"faculty": "Dr. L. Mehta", "meeting_rooms": 1, "capacity": 33, "image": "mylab/cs412.jpg"},
+}
+
+
+@app.route('/lab_details/<lab_code>')
+@login_required
+def lab_details(lab_code):
+    from models import Workstation  # Ensure Workstation model is imported
+
+    total_capacity = {
+        "CS-107": 43,
+        "CS-108": 21,
+        "CS-109": 114,
+        "CS-207": 30,
+        "CS-208": 25,
+        "CS-209": 142,
+        "CS-317": 25,
+        "CS-318": 25,
+        "CS-319": 32,
+        "CS-320": 27,
+        "CS-411": 25,
+        "CS-412": 33
+    }
+
+    lab_meta = {
+        "CS-107": {"faculty": "Dr. Aravind", "meeting_rooms": 1},
+        "CS-108": {"faculty": "Dr. Shravan", "meeting_rooms": 1},
+        "CS-109": {"faculty": "Dr. Geetha", "meeting_rooms": 2},
+        "CS-207": {"faculty": "Dr. Rajeev", "meeting_rooms": 1},
+        "CS-208": {"faculty": "Dr. Sneha", "meeting_rooms": 1},
+        "CS-209": {"faculty": "Dr. Ramesh", "meeting_rooms": 3},
+        "CS-317": {"faculty": "Dr. Anjali", "meeting_rooms": 1},
+        "CS-318": {"faculty": "Dr. Vinay", "meeting_rooms": 1},
+        "CS-319": {"faculty": "Dr. Divya", "meeting_rooms": 1},
+        "CS-320": {"faculty": "Dr. Manoj", "meeting_rooms": 1},
+        "CS-411": {"faculty": "Dr. Isha", "meeting_rooms": 2},
+        "CS-412": {"faculty": "Dr. Aditya", "meeting_rooms": 2}
+    }
+
+    lab_name = lab_code.upper()
+
+    used = Workstation.query.filter_by(room_lab_name=lab_name).count()
+    available = total_capacity.get(lab_name, 0) - used
+    faculty = lab_meta.get(lab_name, {}).get("faculty", "Not Assigned")
+    meetings = lab_meta.get(lab_name, {}).get("meeting_rooms", 0)
+
+    return render_template(
+        "lab_details.html",
+        lab_code=lab_name,
+        capacity=total_capacity.get(lab_name, 0),
+        used_seating=used,
+        available_seating=available,
+        faculty=faculty,
+        meeting_rooms=meetings
+    )
+
+
+@app.route("/slurm/check", methods=["GET", "POST"])
+def slurm_check():
+    result = None
+    if request.method == "POST":
+        roll = request.form.get("roll")
+        status = check_user_on_remote(roll)  # ✅ THIS CALLS THE FUNCTION
+
+        if status is True:
+            result = {"roll": roll, "found": True}
+        elif status is False:
+            result = {"roll": roll, "found": False}
+        else:
+            result = {"roll": roll, "found": None}  # SSH or other error
+
+    return render_template("slurm_facility.html", result=result)
+
+
+import paramiko
+
+def check_user_on_remote(roll):
+    host = "192.168.0.113"         # Your laptop's IP
+    username = "datacenterops"        # SSH login user
+    password = "csedc" 
+    try:
+        client = paramiko.SSHClient()
+        client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        client.connect(hostname=host, username=username, password=password, timeout=5)
+
+        # Use getent to check if user exists
+        stdin, stdout, stderr = client.exec_command(f"getent passwd {roll}")
+        output = stdout.read().decode().strip()
+        client.close()
+
+        return bool(output)
+    except Exception as e:
+        print("SSH connection error:", e)
+        return None
+
+from flask import flash, redirect, url_for, render_template, request
+from flask_login import login_required, current_user
+from werkzeug.security import check_password_hash, generate_password_hash
+
+@app.route("/user/settings", methods=["GET", "POST"])
+@login_required
+def user_settings():
+    if request.method == "POST":
+        current = request.form.get("current_password")
+        new = request.form.get("new_password")
+        confirm = request.form.get("confirm_password")
+
+        if not check_password_hash(current_user.password, current):
+            flash("Current password is incorrect.")
+        elif new != confirm:
+            flash("New passwords do not match.")
+        else:
+            current_user.password = generate_password_hash(new)
+            db.session.commit()
+            flash("Password updated successfully!")
+            return redirect(url_for("user_settings"))
+
+    return render_template("user_settings.html")
+
+
 if __name__ == "__main__":
-    app.run(debug=True, port=5009)
+    app.run(debug=True, port=5006)

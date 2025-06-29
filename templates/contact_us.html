@@ -3,125 +3,88 @@
 
 {% block content %}
 
-<!-- Contact Header -->
-<section class="bg-gradient-to-r from-blue-100 to-indigo-100 py-12">
+<!-- Hero Header -->
+<section class="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white py-16">
   <div class="container mx-auto text-center px-4">
-    <h2 class="text-4xl font-extrabold text-gray-800 mb-4">Contact the Department</h2>
-    <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-      Have questions about labs, staff, or general support? We're here to help you.
+    <h2 class="text-4xl md:text-5xl font-extrabold mb-4">Contact the CSE Department</h2>
+    <p class="text-lg max-w-2xl mx-auto opacity-90">
+      Reach out for any academic, technical, or administrative queries. We’re here to support your journey.
     </p>
   </div>
 </section>
 
-<!-- Department Contact Card -->
-<section class="py-12 bg-white">
-  <div class="container mx-auto px-4">
-    <div class="max-w-5xl mx-auto bg-white shadow-xl rounded-lg overflow-hidden md:flex">
-      <div class="md:w-1/2 bg-blue-50 p-8">
-        <h3 class="text-2xl font-bold text-gray-800 mb-4">Department Contact</h3>
-        <p class="text-gray-700 mb-4">
+<!-- Contact Information -->
+<section class="bg-white py-16">
+  <div class="container mx-auto px-4 max-w-6xl">
+    <div class="bg-gray-100 rounded-xl shadow-lg overflow-hidden grid md:grid-cols-2">
+      
+      <!-- Left: Department Info -->
+      <div class="bg-gradient-to-br from-indigo-100 to-white p-10">
+        <h3 class="text-2xl font-bold text-indigo-800 mb-6">Department Contact</h3>
+        <p class="text-gray-800 mb-4">
           <strong>Address:</strong><br>
           Department of Computer Science & Engineering,<br>
-          Indian Institute of Technology Hyderabad,<br>
-          Kandi, Sangareddy, Telangana - 502285
+          IIT Hyderabad, Kandi, Sangareddy, Telangana – 502285
         </p>
-        <p class="text-gray-700 mb-2">
-          <strong>Email:</strong> <a href="mailto:office.cse@iith.ac.in" class="text-blue-600 hover:underline">office.cse@iith.ac.in</a>
+        <p class="mb-2">
+          <strong>Email:</strong> 
+          <a href="mailto:office.cse@iith.ac.in" class="text-indigo-600 hover:underline">office.cse@iith.ac.in</a>
         </p>
-        <p class="text-gray-700">
-          <strong>Phone:</strong> <a href="tel:+914023016362" class="text-blue-600 hover:underline">+91-40-2301 6362</a>
-        </p>
-      </div>
-      <div class="md:w-1/2 bg-white p-8 border-t md:border-t-0 md:border-l">
-        <h3 class="text-2xl font-bold text-gray-800 mb-4">Office Hours</h3>
-        <p class="text-gray-700 mb-2">
-          <strong>Working Days:</strong> Monday to Friday
-        </p>
-        <p class="text-gray-700 mb-2">
-          <strong>Timings:</strong> 9:00 AM to 5:00 PM
-        </p>
-        <p class="text-gray-700">
-          <strong>Closed on:</strong> Weekends & Public Holidays
+        <p>
+          <strong>Phone:</strong> 
+          <a href="tel:+914023016362" class="text-indigo-600 hover:underline">+91-40-2301 6362</a>
         </p>
       </div>
+
+      <!-- Right: Office Hours -->
+      <div class="bg-orange-100 p-10 border-t md:border-t-0 md:border-l border-gray-200">
+        <h3 class="text-2xl font-bold text-indigo-800 mb-6">Office Hours</h3>
+        <p class="mb-3 text-gray-700"><strong>Working Days:</strong> Monday to Friday</p>
+        <p class="mb-3 text-gray-700"><strong>Timings:</strong> 9:00 AM – 5:00 PM</p>
+        <p class="text-gray-700"><strong>Closed:</strong> Weekends & Public Holidays</p>
+      </div>
+
     </div>
   </div>
 </section>
-
 
 <!-- Staff Directory -->
-<section class="bg-gray-50 py-12">
+<section class="bg-gray-50 py-16">
   <div class="container mx-auto px-4">
-    <h2 class="text-3xl font-bold text-center text-gray-800 mb-10">Department Staff</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-
-      <!-- Staff Card -->
-      <div class="bg-white shadow rounded-lg p-6 text-center">
-        <h3 class="text-xl font-bold text-gray-800">Mr. N. Syamala Rao</h3>
-        <p class="text-blue-600">Senior Technical Superintendent</p>
-        <p class="text-gray-600 text-sm">Email: syamala@cse.iith.ac.in</p>
+    <h2 class="text-3xl font-bold text-center text-gray-800 mb-10">Meet Our Staff</h2>
+    <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 ">
+      {% set staff = [
+        {"name": "Mr. N. Syamala Rao", "role": "Senior Technical Superintendent", "email": "syamala@cse.iith.ac.in"},
+        {"name": "Mr. T. Vijayachakravarthi", "role": "Senior Technical Superintendent", "email": "vijayachakravarthi@cse.iith.ac.in"},
+        {"name": "Mr. Nikith Reddy Peddasheri", "role": "Technician", "email": "nikith@cse.iith.ac.in"},
+        {"name": "Ms. Sunitha Maloth", "role": "Technician", "email": "sunitham@cse.iith.ac.in"},
+        {"name": "Mr. Gaddam Praveen Kumar", "role": "Junior Technician", "email": "praveenk@cse.iith.ac.in"},
+        {"name": "Mr. Shiva Kumar Reddy", "role": "Junior Technician", "email": "shivak@cse.iith.ac.in"},
+        {"name": "Mr. Kiran Kumar Kavali", "role": "Junior Technician", "email": "kirank@cse.iith.ac.in"},
+        {"name": "Mr. Gandepalli Surya Prakash", "role": "Assistant", "email": "suryap@cse.iith.ac.in"},
+        {"name": "Ms. Hannah Daisy", "role": "Junior Assistant", "email": "hannahd@cse.iith.ac.in"}
+      ] %}
+      
+      {% for person in staff %}
+      <div class="bg-purple-100 shadow-md rounded-lg p-6 text-center hover:shadow-xl transition ">
+        <h3 class="text-lg font-bold text-gray-900">{{ person.name }}</h3>
+        <p class="text-indigo-600 font-medium">{{ person.role }}</p>
+        <p class="text-sm text-gray-600 mt-1">{{ person.email }}</p>
       </div>
-
-      <div class="bg-white shadow rounded-lg p-6 text-center">
-        <h3 class="text-xl font-bold text-gray-800">Mr. T. Vijayachakravarthi</h3>
-        <p class="text-blue-600">Senior Technical Superintendent</p>
-        <p class="text-gray-600 text-sm">Email: vijayachakravarthi@cse.iith.ac.in</p>
-      </div>
-
-      <div class="bg-white shadow rounded-lg p-6 text-center">
-        <h3 class="text-xl font-bold text-gray-800">Mr. Nikith Reddy Peddasheri</h3>
-        <p class="text-blue-600">Technician</p>
-        <p class="text-gray-600 text-sm">Email: nikith@cse.iith.ac.in</p>
-      </div>
-
-      <div class="bg-white shadow rounded-lg p-6 text-center">
-        <h3 class="text-xl font-bold text-gray-800">Ms. Sunitha Maloth</h3>
-        <p class="text-blue-600">Technician</p>
-        <p class="text-gray-600 text-sm">Email: sunitham@cse.iith.ac.in</p>
-      </div>
-
-      <div class="bg-white shadow rounded-lg p-6 text-center">
-        <h3 class="text-xl font-bold text-gray-800">Mr. Gaddam Praveen Kumar</h3>
-        <p class="text-blue-600">Junior Technician</p>
-        <p class="text-gray-600 text-sm">Email: praveenk@cse.iith.ac.in</p>
-      </div>
-
-      <div class="bg-white shadow rounded-lg p-6 text-center">
-        <h3 class="text-xl font-bold text-gray-800">Mr. Shiva Kumar Reddy</h3>
-        <p class="text-blue-600">Junior Technician</p>
-        <p class="text-gray-600 text-sm">Email: shivak@cse.iith.ac.in</p>
-      </div>
-
-      <div class="bg-white shadow rounded-lg p-6 text-center">
-        <h3 class="text-xl font-bold text-gray-800">Mr. Kiran Kumar Kavali</h3>
-        <p class="text-blue-600">Junior Technician</p>
-        <p class="text-gray-600 text-sm">Email: kirank@cse.iith.ac.in</p>
-      </div>
-
-      <!-- Admin Staff -->
-      <div class="bg-white shadow rounded-lg p-6 text-center">
-        <h3 class="text-xl font-bold text-gray-800">Mr. Gandepalli Surya Prakash</h3>
-        <p class="text-blue-600">Assistant</p>
-        <p class="text-gray-600 text-sm">Email: suryap@cse.iith.ac.in</p>
-      </div>
-
-      <div class="bg-white shadow rounded-lg p-6 text-center">
-        <h3 class="text-xl font-bold text-gray-800">Ms. Hannah Daisy</h3>
-        <p class="text-blue-600">Junior Assistant</p>
-        <p class="text-gray-600 text-sm">Email: hannahd@cse.iith.ac.in</p>
-      </div>
-
+      {% endfor %}
     </div>
   </div>
 </section>
 
-<!-- Map Placeholder -->
+<!-- Google Map -->
 <section class="py-12">
-    <div class="container mx-auto px-4">
-        <div class="bg-white shadow-lg rounded-lg overflow-hidden">
-            <iframe class="w-full h-96" src="https://maps.google.com/maps?q=IIT%20Hyderabad&t=&z=13&ie=UTF8&iwloc=&output=embed" frameborder="0" allowfullscreen></iframe>
-        </div>
+  <div class="container mx-auto px-4">
+    <div class="rounded-xl shadow-lg overflow-hidden">
+      <iframe class="w-full h-96 border-0"
+        src="https://maps.google.com/maps?q=IIT%20Hyderabad&t=&z=13&ie=UTF8&iwloc=&output=embed"
+        allowfullscreen="" loading="lazy"></iframe>
     </div>
+  </div>
 </section>
 
 {% endblock %}

@@ -1,35 +1,152 @@
+
+
 {% extends "base.html" %}
 {% block title %}Login{% endblock %}
 
 {% block content %}
-<div class="py-16 bg-yellow-100 min-h-screen">
-  <div class="max-w-md mx-auto bg-white shadow-md rounded-lg p-8">
-    <h2 class="text-2xl font-bold text-indigo-700 text-center mb-6">Login</h2>
-    
-    <form method="POST" action="/login" class="space-y-4">
-      <div>
-        <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-        <input name="email" type="email" placeholder="Enter your email" required
-               class="mt-1 w-full border border-gray-300 px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400">
-      </div>
+<style>
+  .login-background {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    min-height: 100vh;
+    padding-top: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
-      <div>
-        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-        <input name="password" type="password" placeholder="Enter your password" required
-               class="mt-1 w-full border border-gray-300 px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400">
-      </div>
+  .login-container {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 1000px;
+    width: 100%;
+    padding: 2rem;
+  }
 
-      <div class="flex justify-between items-center mt-6">
-        <button type="submit"
-                class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded shadow transition duration-300">
-          Login
-        </button>
-        <a href="/register"
-           class="text-sm text-blue-600 hover:underline font-medium">
-          Register here
-        </a>
+  .glass-card {
+    backdrop-filter: blur(12px);
+    background: rgba(255, 255, 255, 0.75);
+    border-radius: 1rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 400px;
+    color: #333;
+  }
+
+  .glass-card h2 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    text-align: center;
+    color: #4f46e5;
+  }
+
+  .glass-card p {
+    font-size: 0.95rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #555;
+  }
+
+  .form-group {
+    margin-bottom: 1.25rem;
+  }
+
+  .form-group input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    background: rgba(255, 255, 255, 0.952);
+    color: #333;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+  }
+
+  .form-group input:focus {
+    outline: none;
+    border-color: #4f46e5;
+    background: rgba(255, 255, 255, 0.6);
+  }
+
+  .login-btn {
+    width: 100%;
+    padding: 0.75rem;
+    background: #4f46e5;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+
+  .login-btn:hover {
+    background: #4338ca;
+  }
+
+  .register-text {
+    font-size: 0.875rem;
+    text-align: center;
+    margin-top: 1.5rem;
+    color: #4f46e5;
+  }
+
+  .register-text a {
+    color: #4f46e5;
+    font-weight: 500;
+    text-decoration: underline;
+  }
+
+  .login-image {
+    max-width: 400px;
+    width: 100%;
+  }
+
+  @media (max-width: 768px) {
+    .login-container {
+      flex-direction: column;
+    }
+
+    .login-image {
+      max-width: 300px;
+    }
+  }
+</style>
+
+<div class="login-background">
+  <div class="login-container">
+    <!-- Login Image -->
+    <img src="{{ url_for('static', filename='images/login2.png') }}" alt="Login illustration" class="login-image">
+
+    <!-- Login Card -->
+    <div class="glass-card">
+      <h2>Welcome Back</h2>
+      <p>Login to access your dashboard</p>
+
+      <form method="POST" action="/login">
+        <div class="form-group">
+          <input name="email" type="email" placeholder="Email" required>
+        </div>
+        <div class="form-group">
+          <input name="password" type="password" placeholder="Password" required>
+        </div> 
+       <div class="flex justify-end mb-4">
+  <a href="{{ url_for('reset_request') }}" class="text-sm text-indigo-600 hover:underline transition">
+    Forgot Password?
+  </a>
+</div>
+
+        <button type="submit" class="login-btn">Sign In</button>
+      </form>
+
+      <div class="register-text">
+        Don't have an account? <a href="/register">Register here</a>
       </div>
-    </form>
+    </div>
   </div>
 </div>
 {% endblock %}
