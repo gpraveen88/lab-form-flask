@@ -2,7 +2,7 @@ from flask_login import LoginManager, UserMixin, login_user, logout_user, login_
 from flask import redirect, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import Flask, render_template, request
-from models import db, User, Workstation, Equipment
+from models import db, User, Workstation, Equipment, ProvisioningRequest
 import pandas as pd
 
 import requests
@@ -583,5 +583,33 @@ def user_settings():
     return render_template("user_settings.html")
 
 
+@app.route('/install_os_form', methods=['GET'])
+def install_os_form():
+    return render_template('install_os_form.html')
+
+
+
+@app.route("/provision", methods=["POST"])
+def provision():
+    mac = request.form.get("mac_address")
+    ip = request.form.get("ip_address")
+    os_image = request.form.get("os_image")
+
+    new_request = ProvisioningRequest(mac_address=mac, ip_address=ip, os_image=os_image)
+    db.session.add(new_request)
+    db.session.commit()
+
+    flash("Provisioning request submitted successfully!", "success")
+    return render_template("provision_success.html", mac=mac, ip=ip, os_image=os_image)
+
+@app.route("/provision_history")
+def provision_history():
+    records = ProvisioningRequest.query.order_by(ProvisioningRequest.timestamp.desc()).all()
+    return render_template("provision_history.html", records=records)
+
+@app.route("/os_related")
+def os_related():
+    return render_template("os_related.html")
+
 if __name__ == "__main__":
-    app.run(debug=True, port=5006)
+    app.run(debug=True, port=5009)

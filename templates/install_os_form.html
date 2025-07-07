@@ -1,0 +1,118 @@
+{% extends "login_home.html" %}
+{% block title %}OS Provisioning{% endblock %}
+
+{% block content %}
+<style>
+  .os-provision-background {
+    background: linear-gradient(to bottom right, #4f46e5, #06b6d4);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  .os-card {
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(8px);
+    border-radius: 1.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    padding: 2rem 3rem;
+    max-width: 550px;
+    width: 100%;
+  }
+
+  .os-card h2 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    text-align: center;
+    color: #4f46e5;
+    margin-bottom: 2rem;
+  }
+
+  table {
+    width: 100%;
+  }
+
+  td {
+    padding: 0.6rem 0.4rem;
+    vertical-align: middle;
+  }
+
+  td.label {
+    font-weight: 500;
+    color: #333;
+    width: 40%;
+    white-space: nowrap;
+  }
+
+  td.input {
+    width: 60%;
+  }
+
+  input[type="text"],
+  select {
+    width: 100%;
+    padding: 0.65rem;
+    border-radius: 0.5rem;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    background-color: #f9f9f9;
+  }
+
+  input:focus,
+  select:focus {
+    outline: none;
+    border-color: #4f46e5;
+    background-color: #fff;
+  }
+
+  .submit-btn {
+    width: 100%;
+    margin-top: 1.5rem;
+    padding: 0.75rem;
+    background: linear-gradient(to right, #22c55e, #16a34a);
+    color: white;
+    font-weight: 600;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+
+  .submit-btn:hover {
+    transform: scale(1.03);
+    background: linear-gradient(to right, #16a34a, #15803d);
+  }
+</style>
+
+<div class="os-provision-background">
+  <div class="os-card">
+    <h2>Automated OS Provisioning</h2>
+    <form method="POST" action="/provision">
+      <table>
+        <tr>
+          <td class="label"><label for="mac_address">MAC Address:</label></td>
+          <td class="input"><input type="text" id="mac_address" name="mac_address" placeholder="AA:BB:CC:DD:EE:FF" required></td>
+        </tr>
+        <tr>
+          <td class="label"><label for="ip_address">IP Address:</label></td>
+          <td class="input"><input type="text" id="ip_address" name="ip_address" placeholder="192.168.1.100" required></td>
+        </tr>
+        <tr>
+          <td class="label"><label for="os_image">Select OS Image:</label></td>
+          <td class="input">
+            <select id="os_image" name="os_image" required>
+              <option value="" disabled selected>Select an image</option>
+              <option value="ubuntu-22.04.iso">Ubuntu 22.04</option>
+              <option value="centos-7.iso">CentOS 7</option>
+            </select>
+          </td>
+        </tr>
+      </table>
+      <button type="submit" class="submit-btn">🚀 Install OS</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

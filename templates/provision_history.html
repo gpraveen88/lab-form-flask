@@ -1,0 +1,39 @@
+{% extends "login_home.html" %}
+{% block title %}Provision History{% endblock %}
+
+{% block content %}
+<div class="container mt-6 px-4">
+  <h2 class="text-2xl font-bold text-center mb-6 text-indigo-700">Provisioning Request History</h2>
+
+  {% if records %}
+    <div class="overflow-x-auto">
+      <table class="table-auto min-w-full bg-white rounded-lg shadow-md">
+        <thead class="bg-indigo-600 text-white">
+          <tr>
+            <th class="px-4 py-2 text-left">#</th>
+            <th class="px-4 py-2 text-left">MAC Address</th>
+            <th class="px-4 py-2 text-left">IP Address</th>
+            <th class="px-4 py-2 text-left">OS Image</th>
+            <th class="px-4 py-2 text-left">Timestamp</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for record in records %}
+          <tr class="border-b hover:bg-gray-100">
+            <td class="px-4 py-2">{{ loop.index }}</td>
+            <td class="px-4 py-2">{{ record.mac_address }}</td>
+            <td class="px-4 py-2">{{ record.ip_address }}</td>
+            <td class="px-4 py-2">{{ record.os_image }}</td>
+            <td class="px-4 py-2">{{ record.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="text-center text-gray-600 mt-8">
+      No provisioning records found.
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends "login_home.html" %}
+{% block title %}Provisioning Success{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="alert alert-success shadow rounded-3 p-4">
+    <h4 class="text-success">✅ OS Provisioning Request Submitted!</h4>
+    <p><strong>MAC Address:</strong> {{ mac }}</p>
+    <p><strong>IP Address:</strong> {{ ip }}</p>
+    <p><strong>Selected OS:</strong> {{ os_image }}</p>
+    <a href="{{ url_for('install_os_form') }}" class="btn btn-primary mt-3">Back to OS Form</a>
+  </div>
+</div>
+{% endblock %}

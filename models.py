@@ -1,3 +1,4 @@
+
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
@@ -58,10 +59,6 @@ class Workstation(db.Model):
     monitor_serial = db.Column(db.String(100))
 
 
-
-
-
-
 class Equipment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
@@ -76,3 +73,11 @@ class Equipment(db.Model):
     intender_name = db.Column(db.String(100), nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
     department_code = db.Column(db.String(100), unique=True, nullable=False)
+
+class ProvisioningRequest(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    mac_address = db.Column(db.String(32), nullable=False)
+    ip_address = db.Column(db.String(32), nullable=False)
+    os_image = db.Column(db.String(64), nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
