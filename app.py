@@ -175,6 +175,45 @@ def search():
 
     return render_template("search.html", result=result, message=message, layout="login_home.html")
 
+# @app.route("/utilization")
+# def utilization():
+#     all_records = Workstation.query.all()
+
+#     lab_capacities = {
+#         "CS-107": 43,
+#         "CS-108": 21,
+#         "CS-109": 114,
+#         "CS-207": 30,
+#         "CS-208": 25,
+#         "CS-209": 142,
+#         "CS-317": 25,
+#         "CS-318": 25,
+#         "CS-319": 32,
+#         "CS-320": 27,
+#         "CS-411": 25,
+#         "CS-412": 33
+#     }
+
+#     from collections import defaultdict
+#     lab_counts = defaultdict(int)
+#     for r in all_records:
+#         lab_counts[r.room_lab_name] += 1
+
+#     lab_stats = {}
+#     for lab, total in lab_capacities.items():
+#         used = lab_counts.get(lab, 0)
+#         available = total - used
+#         lab_stats[lab] = {
+#             "total": total,
+#             "used": used,
+#             "available": available
+#         }
+
+#     return render_template("utilization.html", lab_stats=lab_stats)
+from flask import render_template
+from collections import defaultdict
+from models import Workstation  # Adjust this import to match your structure
+
 @app.route("/utilization")
 def utilization():
     all_records = Workstation.query.all()
@@ -194,22 +233,41 @@ def utilization():
         "CS-412": 33
     }
 
-    from collections import defaultdict
     lab_counts = defaultdict(int)
+    used_seats_map = defaultdict(list)
+
     for r in all_records:
         lab_counts[r.room_lab_name] += 1
+        try:
+            seat_no = int(r.cubicle_no)
+            hover_name = "Occupied"
+            if r.name and r.roll:
+                hover_name = f"{r.name} ({r.roll})"
+            elif r.name:
+                hover_name = r.name
+            elif r.roll:
+                hover_name = r.roll
+
+            used_seats_map[r.room_lab_name].append((seat_no, hover_name))
+        except (ValueError, TypeError):
+            pass  # Invalid seat number; skip
 
     lab_stats = {}
     for lab, total in lab_capacities.items():
         used = lab_counts.get(lab, 0)
         available = total - used
+        used_seats = dict(used_seats_map.get(lab, []))  # {seat_no: hover_text}
         lab_stats[lab] = {
             "total": total,
             "used": used,
-            "available": available
+            "available": available,
+            "used_seats": used_seats
         }
 
     return render_template("utilization.html", lab_stats=lab_stats)
+
+
+
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -404,11 +462,33 @@ import pandas as pd
 from io import BytesIO
 from models import Equipment
 
+from flask import request, render_template
+from sqlalchemy import or_
+
 @app.route("/equipment_list", methods=["GET"])
-@login_required
 def equipment_list():
-    query = Equipment.query.all()
-    return render_template("equipment_list.html", equipment=query)
+    search_query = request.args.get('search', '').strip()
+    if search_query:
+        equipment = Equipment.query.filter(
+            or_(
+                Equipment.name.ilike(f"%{search_query}%"),
+                Equipment.category.ilike(f"%{search_query}%"),
+                Equipment.status.ilike(f"%{search_query}%"),
+                Equipment.department_code.ilike(f"%{search_query}%"),
+                Equipment.intender_name.ilike(f"%{search_query}%"),
+                Equipment.model.ilike(f"%{search_query}%"),
+                Equipment.location.ilike(f"%{search_query}%"),
+                Equipment.manufacturer.ilike(f"%{search_query}%"),
+                Equipment.serial_number.ilike(f"%{search_query}%"),
+                Equipment.po_date.ilike(f"%{search_query}%"),
+                Equipment.purchase_date.ilike(f"%{search_query}%")
+            )
+        ).all()
+    else:
+        equipment = Equipment.query.all()
+    return render_template("equipment_list.html", equipment=equipment)
+
+
 
 from flask import make_response
 import pandas as pd
@@ -467,10 +547,62 @@ lab_meta = {
 }
 
 
+# @app.route('/lab_details/<lab_code>')
+# @login_required
+# def lab_details(lab_code):
+#     from models import Workstation  # Ensure Workstation model is imported
+
+#     total_capacity = {
+#         "CS-107": 43,
+#         "CS-108": 21,
+#         "CS-109": 114,
+#         "CS-207": 30,
+#         "CS-208": 25,
+#         "CS-209": 142,
+#         "CS-317": 25,
+#         "CS-318": 25,
+#         "CS-319": 32,
+#         "CS-320": 27,
+#         "CS-411": 25,
+#         "CS-412": 33
+#     }
+
+#     lab_meta = {
+#         "CS-107": {"faculty": "Dr. Aravind", "meeting_rooms": 1},
+#         "CS-108": {"faculty": "Dr. Shravan", "meeting_rooms": 1},
+#         "CS-109": {"faculty": "Dr. Geetha", "meeting_rooms": 2},
+#         "CS-207": {"faculty": "Dr. Rajeev", "meeting_rooms": 1},
+#         "CS-208": {"faculty": "Dr. Sneha", "meeting_rooms": 1},
+#         "CS-209": {"faculty": "Dr. Ramesh", "meeting_rooms": 3},
+#         "CS-317": {"faculty": "Dr. Anjali", "meeting_rooms": 1},
+#         "CS-318": {"faculty": "Dr. Vinay", "meeting_rooms": 1},
+#         "CS-319": {"faculty": "Dr. Divya", "meeting_rooms": 1},
+#         "CS-320": {"faculty": "Dr. Manoj", "meeting_rooms": 1},
+#         "CS-411": {"faculty": "Dr. Isha", "meeting_rooms": 2},
+#         "CS-412": {"faculty": "Dr. Aditya", "meeting_rooms": 2}
+#     }
+
+#     lab_name = lab_code.upper()
+
+#     used = Workstation.query.filter_by(room_lab_name=lab_name).count()
+#     available = total_capacity.get(lab_name, 0) - used
+#     faculty = lab_meta.get(lab_name, {}).get("faculty", "Not Assigned")
+#     meetings = lab_meta.get(lab_name, {}).get("meeting_rooms", 0)
+
+#     return render_template(
+#         "lab_details.html",
+#         lab_code=lab_name,
+#         capacity=total_capacity.get(lab_name, 0),
+#         used_seating=used,
+#         available_seating=available,
+#         faculty=faculty,
+#         meeting_rooms=meetings
+#     )
+
 @app.route('/lab_details/<lab_code>')
 @login_required
 def lab_details(lab_code):
-    from models import Workstation  # Ensure Workstation model is imported
+    from models import Workstation  # Ensure this is the correct model
 
     total_capacity = {
         "CS-107": 43,
@@ -503,21 +635,59 @@ def lab_details(lab_code):
     }
 
     lab_name = lab_code.upper()
-
-    used = Workstation.query.filter_by(room_lab_name=lab_name).count()
-    available = total_capacity.get(lab_name, 0) - used
+    capacity = total_capacity.get(lab_name, 0)
     faculty = lab_meta.get(lab_name, {}).get("faculty", "Not Assigned")
-    meetings = lab_meta.get(lab_name, {}).get("meeting_rooms", 0)
+    meeting_rooms = lab_meta.get(lab_name, {}).get("meeting_rooms", 0)
+
+    workstations = Workstation.query.filter_by(room_lab_name=lab_name).all()
+
+    # Create seat map
+    assigned_seats = {}
+    for ws in workstations:
+        if ws.cubicle_no:
+            cleaned = ws.cubicle_no.strip()
+            if cleaned.isdigit():
+                assigned_seats[int(cleaned)] = ws
+
+    seats = []
+    for seat_num in range(1, capacity + 1):
+        if seat_num in assigned_seats:
+            student = assigned_seats[seat_num]
+            seats.append({
+                "number": seat_num,
+                "occupied": True,
+                "student_name": student.name,
+                "roll_number": student.roll,
+                "email": student.email,
+                "branch": student.course,
+                "year": student.year,
+                "photo_url": f"/static/photos/{student.roll}.jpg"
+            })
+        else:
+            seats.append({
+                "number": seat_num,
+                "occupied": False
+            })
 
     return render_template(
         "lab_details.html",
         lab_code=lab_name,
-        capacity=total_capacity.get(lab_name, 0),
-        used_seating=used,
-        available_seating=available,
+        capacity=capacity,
+        used_seating=len(workstations),
+        available_seating=capacity - len(workstations),
         faculty=faculty,
-        meeting_rooms=meetings
+        meeting_rooms=meeting_rooms,
+        seats=seats
     )
+
+
+@app.route("/student/<roll>")
+@login_required
+def student_details(roll):
+    student = Workstation.query.filter_by(roll=roll).first_or_404()
+
+    return render_template("student_details.html", student=student)
+
 
 
 @app.route("/slurm/check", methods=["GET", "POST"])
@@ -611,5 +781,56 @@ def provision_history():
 def os_related():
     return render_template("os_related.html")
 
+from flask import render_template, request
+# from flask import app, db  # Replace 'yourapp' with your actual app name
+from models import Workstation
+from flask import render_template, request
+
+@app.route('/students_directory', methods=['GET'])
+def students_directory():
+    # Get filter values from query parameters
+    course = request.args.get('course')
+    year = request.args.get('year')
+    room_lab_name = request.args.get('room_lab_name')
+    roll = request.args.get('roll')
+    faculty = request.args.get('faculty')
+
+    # Start with base query
+    query = Workstation.query
+
+    # Apply filters
+    if course:
+        query = query.filter(Workstation.course == course)
+    if year:
+        query = query.filter(Workstation.year == year)
+    if room_lab_name:
+        query = query.filter(Workstation.room_lab_name == room_lab_name)
+    if roll:
+        query = query.filter(Workstation.roll.ilike(f"%{roll}%"))
+    if faculty:
+        query = query.filter(Workstation.faculty == faculty)
+
+    students = query.all()
+
+    # For dropdown filters
+    faculty_list = [
+        "Prof. Antony Franklin", "Dr. Ashish Mishra", "Prof. Bheemarjuna Reddy Tamma",
+        "Prof. C. Krishna Mohan", "Dr. J. Saketha Nath", "Dr. Jyothi Vedurada",
+        "Dr. Kotaro Kataoka", "Prof. M. V. Panduranga Rao", "Dr. Manish Singh",
+        "Dr. Maria Francis", "Prof. Maunendra Sankar Desarkar", "Dr. N. R. Aravind",
+        "Dr. Nitin Saurabh", "Dr. Praveen Tammana", "Dr. Rajesh Kedia", "Dr. Rakesh Venkat",
+        "Dr. Ramakrishna Upadrasta", "Dr. Rameshwar Pratap", "Dr. Rogers Mathew",
+        "Prof. Sathya Peri", "Dr. Saurabh Kumar", "Dr. Shirshendu Das", "Dr. Sobhan Babu",
+        "Dr. Srijith P. K.", "Prof. Subrahmanyam Kalyanasundaram", "Prof. Vineeth N. Balasubramanian"
+    ]
+
+    labs = ["CS-107", "CS-108", "CS-109", "CS-207", "CS-208", "CS-209",
+            "CS-317", "CS-318", "CS-319", "CS-320", "CS-411", "CS-412"]
+
+    return render_template("students_directory.html", students=students,
+                           faculty_list=faculty_list, labs=labs)
+
+
+
 if __name__ == "__main__":
-    app.run(debug=True, port=5009)
+    app.run(debug=True, port=5006)

@@ -4,18 +4,21 @@
 {% block content %}
 <section class="bg-gradient-to-r from-sky-100 to-indigo-100 py-12">
   <div class="max-w-6xl mx-auto px-6">
+
+    <!-- Heading -->
     <div class="text-center mb-10">
       <h1 class="text-4xl font-bold text-indigo-800 drop-shadow-md">{{ lab_code }} Laboratory</h1>
       <p class="text-gray-700 mt-2 text-lg">Comprehensive details of lab infrastructure and usage</p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center bg-white rounded-xl shadow-lg p-6">
-      
-      <!-- Lab Image -->
+    <!-- Info Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-10 bg-white rounded-xl shadow-lg p-6">
+
+      <!-- Image -->
       <div class="flex justify-center">
         <img src="{{ url_for('static', filename='mylab/' ~ lab_code ~ '.jpg') }}"
              alt="{{ lab_code }} Lab Image"
-             class="rounded-xl shadow-md border border-gray-200 w-full max-w-md hover:scale-105 transition duration-300"
+             class="rounded-xl border border-gray-200 w-full max-w-md hover:scale-105 transition duration-300"
              style="max-height: 350px;">
       </div>
 
@@ -23,38 +26,61 @@
       <div class="overflow-x-auto">
         <table class="w-full text-left text-gray-700 text-sm sm:text-base">
           <tbody class="divide-y divide-gray-100">
-            <tr class="hover:bg-gray-50 transition">
-              <td class="py-3 font-semibold text-indigo-700 w-1/2">Total Capacity</td>
-              <td class="py-3">{{ capacity }}</td>
-            </tr>
-            <tr class="hover:bg-gray-50 transition">
-              <td class="py-3 font-semibold text-indigo-700">Available Seating</td>
-              <td class="py-3">{{ available_seating }}</td>
-            </tr>
-            <tr class="hover:bg-gray-50 transition">
-              <td class="py-3 font-semibold text-indigo-700">Used Seating</td>
-              <td class="py-3">{{ used_seating }}</td>
-            </tr>
-            <tr class="hover:bg-gray-50 transition">
-              <td class="py-3 font-semibold text-indigo-700">Faculty In-Charge</td>
-              <td class="py-3">{{ faculty }}</td>
-            </tr>
-            <tr class="hover:bg-gray-50 transition">
-              <td class="py-3 font-semibold text-indigo-700">Meeting Rooms</td>
-              <td class="py-3">{{ meeting_rooms }}</td>
-            </tr>
+            <tr><td class="py-3 font-semibold text-indigo-700">Total Capacity</td><td class="py-3">{{ capacity }}</td></tr>
+            <tr><td class="py-3 font-semibold text-indigo-700">Available Seating</td><td class="py-3">{{ available_seating }}</td></tr>
+            <tr><td class="py-3 font-semibold text-indigo-700">Used Seating</td><td class="py-3">{{ used_seating }}</td></tr>
+            <tr><td class="py-3 font-semibold text-indigo-700">Faculty In-Charge</td><td class="py-3">{{ faculty }}</td></tr>
+            <tr><td class="py-3 font-semibold text-indigo-700">Meeting Rooms</td><td class="py-3">{{ meeting_rooms }}</td></tr>
           </tbody>
         </table>
 
+        <!-- Back Button -->
         <div class="mt-6">
-          <a href="/cse_labs"
-             class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded shadow transition">
+          <a href="/cse_labs" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded shadow">
             ← Back to Labs
           </a>
         </div>
       </div>
-
     </div>
+
+    <!-- Seating Layout -->
+    <!-- Seating Layout -->
+<div class="mt-12 text-center">
+  <h2 class="text-2xl font-bold text-indigo-800 mb-4">Seating Layout</h2>
+
+  <div class="grid grid-cols-10 gap-3 justify-items-center">
+    {% for seat in seats %}
+      {% if seat.occupied %}
+        <!-- Occupied Seat -->
+        <a href="{{ url_for('student_details', roll=seat.roll_number) }}"
+           class="relative group w-10 h-10 bg-red-600 rounded-full flex items-center justify-center text-white font-semibold hover:scale-110 transition"
+           title="Click to view student profile">
+          {{ seat.number }}
+          <!-- Tooltip on hover -->
+          <div class="absolute bottom-12 left-1/2 transform -translate-x-1/2 hidden group-hover:block w-56 bg-white text-gray-800 text-sm rounded-lg shadow-lg px-4 py-2 z-50">
+            <p class="font-bold">{{ seat.student_name }}</p>
+            <p>{{ seat.roll_number }}</p>
+            <!-- <p>{{ seat.email }}</p> -->
+            <p>{{ seat.branch }} - {{ seat.year }}</p>
+          </div>
+        </a>
+      {% else %}
+        <!-- Available Seat -->
+        <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center text-white font-semibold">
+          {{ seat.number }}
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  <!-- Legend -->
+  <div class="mt-6 text-sm text-gray-700">
+    <span class="inline-block w-4 h-4 bg-red-600 rounded-full mr-1"></span> Occupied
+    <span class="inline-block w-4 h-4 bg-green-500 rounded-full ml-4 mr-1"></span> Available
+  </div>
+</div>
+
+
   </div>
 </section>
 {% endblock %}

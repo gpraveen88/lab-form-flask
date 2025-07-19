@@ -1,0 +1,23 @@
+{% extends login_home.html %}
+{% block title %}{{ lab_code }} Seat Reservation{% endblock %}
+
+{% block content %}
+<div class="container mx-auto py-10">
+  <h2 class="text-3xl font-bold text-center mb-6">{{ lab_code }} - Seat Reservation</h2>
+  <div class="grid grid-cols-{{ layout.cols }} gap-2 justify-center items-center">
+    {% set total = layout.rows * layout.cols %}
+    {% for i in range(total) %}
+      {% if i in layout.booked %}
+        <div class="bg-red-500 text-white text-center p-2 rounded">X</div>
+      {% else %}
+        <div class="bg-green-500 hover:bg-green-600 text-white text-center p-2 rounded cursor-pointer">
+          {{ i + 1 }}
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+  <div class="text-center mt-6">
+    <a href="{{ url_for('home') }}" class="text-blue-600 hover:underline">← Back to Labs</a>
+  </div>
+</div>
+{% endblock %}

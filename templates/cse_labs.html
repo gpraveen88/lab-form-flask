@@ -5,77 +5,70 @@
 <!-- Hero Section -->
 <div class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white py-16">
   <div class="container mx-auto px-4 text-center">
-
-    <h1 class="text-5xl font-extrabold text-white mb-4">Our CSE Labs</h1>
-    <p class="text-lg text-blue-100 max-w-3xl mx-auto">
-      Discover world-class facilities for research, innovation, and real-world problem solving.
+    <h1 class="text-5xl font-bold mb-4">CSE Labs @ IITH</h1>
+    <p class="text-lg text-indigo-100 max-w-2xl mx-auto">
+      Explore lab spaces designed for cutting-edge research, teaching, and student innovation.
     </p>
   </div>
 </div>
 
-<!-- Labs Grid Section -->
+{% set labs = [
+  {'name': 'CS-107 Research Lab', 'desc': 'Advanced research environment.', 'tags': ['AI', 'Systems'], 'count': 43, 'floor': 'First Floor', 'color': 'blue'},
+  {'name': 'CS-108 Research Lab', 'desc': 'Network and security lab.', 'tags': ['Security', 'Networks'], 'count': 21, 'floor': 'First Floor', 'color': 'blue'},
+  {'name': 'CS-109 Teaching Lab', 'desc': 'ML & simulation focused.', 'tags': ['ML', 'Simulation'], 'count': 114, 'floor': 'First Floor', 'color': 'blue'},
+
+  {'name': 'CS-207 Lab', 'desc': 'Data and algorithms lab.', 'tags': ['Data', 'Algorithms'], 'count': 30, 'floor': 'Second Floor', 'color': 'green'},
+  {'name': 'CS-208 Lab', 'desc': 'System design and embedded projects.', 'tags': ['Embedded', 'Design'], 'count': 25, 'floor': 'Second Floor', 'color': 'green'},
+  {'name': 'CS-209 Lab', 'desc': 'High-capacity computing lab.', 'tags': ['Cloud', 'Big Data'], 'count': 142, 'floor': 'Second Floor', 'color': 'green'},
+
+  {'name': 'CS-317 Lab', 'desc': 'Software engineering practice zone.', 'tags': ['DevOps', 'Testing'], 'count': 25, 'floor': 'Third Floor', 'color': 'yellow'},
+  {'name': 'CS-318 Lab', 'desc': 'IoT development hub.', 'tags': ['IoT', 'Sensors'], 'count': 25, 'floor': 'Third Floor', 'color': 'yellow'},
+  {'name': 'CS-319 Lab', 'desc': 'Database and transactions lab.', 'tags': ['DBMS', 'Transactions'], 'count': 32, 'floor': 'Third Floor', 'color': 'yellow'},
+  {'name': 'CS-320 Lab', 'desc': 'Project and prototyping space.', 'tags': ['Prototyping', 'Hardware'], 'count': 27, 'floor': 'Third Floor', 'color': 'yellow'},
+
+  {'name': 'CS-411 Lab', 'desc': 'Thesis/project discussion lab.', 'tags': ['Thesis', 'Discussion'], 'count': 25, 'floor': 'Fourth Floor', 'color': 'red'},
+  {'name': 'CS-412 Lab', 'desc': 'Visual computing lab.', 'tags': ['Graphics', 'Vision'], 'count': 33, 'floor': 'Fourth Floor', 'color': 'red'}
+] %}
+
+<!-- Lab Cards -->
+<!-- Grouped Lab Cards by Floor -->
 <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
+  {% set grouped = {} %}
+  {% for lab in labs %}
+    {% if grouped[lab.floor] is not defined %}
+      {% set _ = grouped.update({lab.floor: []}) %}
+    {% endif %}
+    {% set _ = grouped[lab.floor].append(lab) %}
+  {% endfor %}
 
-  {% set color_map = {
-    'blue': 'bg-blue-100 text-blue-800',
-    'green': 'bg-green-100 text-green-800',
-    'purple': 'bg-purple-100 text-purple-800',
-    'yellow': 'bg-yellow-100 text-yellow-800',
-    'red': 'bg-red-100 text-red-800',
-    'indigo': 'bg-indigo-100 text-indigo-800',
-    'cyan': 'bg-cyan-100 text-cyan-800',
-    'orange': 'bg-orange-100 text-orange-800',
-    'teal': 'bg-teal-100 text-teal-800',
-    'pink': 'bg-pink-100 text-pink-800',
-    'lime': 'bg-lime-100 text-lime-800',
-    'amber': 'bg-amber-100 text-amber-800'
-  } %}
-
-  {% set labs = [
-    {'name': 'CS-107 Research Lab', 'desc': 'Advanced research environment.', 'tags': ['AI', 'Systems'], 'count': 43, 'color': 'blue'},
-    {'name': 'CS-108 Research Lab', 'desc': 'Network and security lab.', 'tags': ['Security', 'Networks'], 'count': 21, 'color': 'green'},
-    {'name': 'CS-109 Teaching Lab', 'desc': 'ML & simulation focused.', 'tags': ['ML', 'Simulation'], 'count': 114, 'color': 'purple'},
-    {'name': 'CS-207 Lab', 'desc': 'Data and algorithms lab.', 'tags': ['Data', 'Algorithms'], 'count': 30, 'color': 'yellow'},
-    {'name': 'CS-208 Lab', 'desc': 'System design and embedded projects.', 'tags': ['Embedded', 'Design'], 'count': 25, 'color': 'red'},
-    {'name': 'CS-209 Lab', 'desc': 'High-capacity computing lab.', 'tags': ['Cloud', 'Big Data'], 'count': 142, 'color': 'indigo'},
-    {'name': 'CS-317 Lab', 'desc': 'Software engineering practice zone.', 'tags': ['DevOps', 'Testing'], 'count': 25, 'color': 'cyan'},
-    {'name': 'CS-318 Lab', 'desc': 'IoT development hub.', 'tags': ['IoT', 'Sensors'], 'count': 25, 'color': 'orange'},
-    {'name': 'CS-319 Lab', 'desc': 'Database and transactions lab.', 'tags': ['DBMS', 'Transactions'], 'count': 32, 'color': 'teal'},
-    {'name': 'CS-320 Lab', 'desc': 'Project and prototyping space.', 'tags': ['Prototyping', 'Hardware'], 'count': 27, 'color': 'pink'},
-    {'name': 'CS-411 Lab', 'desc': 'Thesis/project discussion lab.', 'tags': ['Thesis', 'Discussion'], 'count': 25, 'color': 'lime'},
-    {'name': 'CS-412 Lab', 'desc': 'Visual computing lab.', 'tags': ['Graphics', 'Vision'], 'count': 33, 'color': 'amber'}
-  ] %}
-
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-    {% for lab in labs %}
-    <div class="bg-white rounded-lg shadow hover:shadow-xl transition duration-300 overflow-hidden">
-      <div class="h-5 flex items-center justify-center {{ color_map[lab.color].split(' ')[0] }}">
-        <!-- <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 {{ color_map[lab.color].split(' ')[1] }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M12 14l9-5-9-5-9 5 9 5zm0 0v6m0 0H6m6 0h6"/>
-        </svg> -->
-      </div>
-      <div class="p-6">
-        <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ lab.name }}</h3>
-        <p class="text-gray-600 mb-2">{{ lab.desc }}</p>
-        <p class="text-sm text-gray-500 mb-2">Total Seating Capacity: <strong>{{ lab.count }}</strong></p>
-        <div class="flex flex-wrap gap-2 mb-4">
-          {% for tag in lab.tags %}
-          <span class="px-3 py-1 {{ color_map[lab.color] }} text-sm font-medium rounded-full">{{ tag }}</span>
-          {% endfor %}
+  {% for floor, floor_labs in grouped.items() %}
+    <h2 class="text-2xl text-center text-gray-800 mb-6">{{ floor }} Labs</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+      {% for lab in floor_labs %}
+      <div class="bg-white rounded-lg shadow hover:shadow-xl transition duration-300 border-t-4 border-{{ lab.color }}-500">
+        <div class="p-6">
+          <h3 class="text-xl font-semibold text-gray-900 mb-1">{{ lab.name }}</h3>
+          <p class="text-gray-600 mb-1">{{ lab.desc }}</p>
+          <p class="text-sm text-gray-700 mb-1"><strong>Floor:</strong> {{ lab.floor }}</p>
+          <p class="text-sm text-gray-500 mb-2">Total Seating Capacity: <strong>{{ lab.count }}</strong></p>
+          <div class="flex flex-wrap gap-2 mb-4">
+            {% for tag in lab.tags %}
+            <span class="px-3 py-1 bg-{{ lab.color }}-100 text-{{ lab.color }}-800 text-sm rounded-full">{{ tag }}</span>
+            {% endfor %}
+          </div>
+          <a href="{{ url_for('lab_details', lab_code=lab.name.split(' ')[0]) }}"
+             class="inline-flex items-center px-4 py-2 bg-{{ lab.color }}-600 text-white rounded-md hover:bg-{{ lab.color }}-700 transition">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M15 12H9m0 0v-2m0 2v2m-7-6a9 9 0 1118 0 9 9 0 01-18 0z"/>
+            </svg>
+            View Lab Details
+          </a>
         </div>
-        <a href="{{ url_for('lab_details', lab_code=lab.name.split(' ')[0]) }}" title="View Lab Details"
-           class="inline-flex items-center px-4 py-2 bg-{{ lab.color }}-600 text-white rounded-md hover:bg-{{ lab.color }}-700 transition">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M15 12H9m0 0v-2m0 2v2m-7-6a9 9 0 1118 0 9 9 0 01-18 0z"/>
-          </svg>
-          View Lab Details
-        </a>
       </div>
+      {% endfor %}
     </div>
-    {% endfor %}
-  </div>
+  {% endfor %}
 </div>
 
 {% endblock %}

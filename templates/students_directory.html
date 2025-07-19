@@ -1,0 +1,103 @@
+{% extends "login_home.html" %}
+{% block title %}Student Directory{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-6">
+  <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">CSE Student Directory</h1>
+
+  <!-- Filter Panel -->
+  <form method="GET" action="/students_directory" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 bg-white shadow p-4 rounded-lg mb-6">
+    <div>
+      <label class="block text-sm font-medium text-gray-700">Course</label>
+      <select name="course" class="w-full mt-1 px-3 py-2 border rounded">
+        <option value="">All</option>
+        <option value="B.Tech">B.Tech</option>
+        <option value="M.Tech TA">M.Tech TA</option>
+        <option value="M.Tech RA">M.Tech RA</option>
+        <option value="Ph.D.">Ph.D.</option>
+        <option value="Intern">Intern</option>
+      </select>
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium text-gray-700">Year</label>
+      <select name="year" class="w-full mt-1 px-3 py-2 border rounded">
+        <option value="">All</option>
+        <option value="I">I</option>
+        <option value="II">II</option>
+        <option value="III">III</option>
+        <option value="IV">IV</option>
+        <option value="V">V</option>
+      </select>
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium text-gray-700">Lab Room</label>
+      <select name="room_lab_name" class="w-full mt-1 px-3 py-2 border rounded">
+        <option value="">All</option>
+        {% for room in ["CS-107","CS-108","CS-109","CS-207","CS-208","CS-209","CS-317","CS-318","CS-319","CS-320","CS-411","CS-412"] %}
+        <option value="{{ room }}">{{ room }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium text-gray-700">Faculty In-charge</label>
+      <select name="faculty" class="w-full mt-1 px-3 py-2 border rounded">
+        <option value="">All</option>
+        {% for f in faculty_list %}
+        <option value="{{ f }}">{{ f }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="md:col-span-2 lg:col-span-1">
+      <label class="block text-sm font-medium text-gray-700">Search by Roll Number</label>
+      <input type="text" name="roll" placeholder="Enter Roll Number" class="w-full mt-1 px-3 py-2 border rounded" />
+    </div>
+
+    <div class="md:col-span-1 flex items-end">
+      <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full">Search</button>
+    </div>
+  </form>
+
+  <!-- Results Table -->
+  {% if students %}
+  <div class="overflow-x-auto">
+    <table class="min-w-full bg-white border border-gray-300">
+      <thead>
+        <tr class="bg-gray-100">
+          <th class="py-2 px-4 border">Name</th>
+          <th class="py-2 px-4 border">Roll Number</th>
+          <th class="py-2 px-4 border">Course</th>
+          <th class="py-2 px-4 border">Year</th>
+          <th class="py-2 px-4 border">Lab</th>
+          <th class="py-2 px-4 border">Cubicle</th>
+          <th class="py-2 px-4 border">Faculty</th>
+          <th class="py-2 px-4 border">Staff</th>
+          <th class="py-2 px-4 border">Email</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for student in students %}
+      <tr class="text-sm text-gray-800 hover:bg-gray-50">
+  <td class="py-2 px-4 border">{{ student.name }}</td>
+  <td class="py-2 px-4 border">{{ student.roll }}</td>
+  <td class="py-2 px-4 border">{{ student.course }}</td>
+  <td class="py-2 px-4 border">{{ student.year }}</td>
+  <td class="py-2 px-4 border">{{ student.room_lab_name }}</td>  <!-- ✅ corrected -->
+  <td class="py-2 px-4 border">{{ student.cubicle_no }}</td>      <!-- ✅ corrected -->
+  <td class="py-2 px-4 border">{{ student.faculty }}</td>
+  <td class="py-2 px-4 border">{{ student.staff_incharge }}</td> <!-- ✅ corrected -->
+  <td class="py-2 px-4 border">{{ student.email }}</td>
+</tr>
+
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <p class="text-gray-600 text-center mt-8">No students found matching your search criteria.</p>
+  {% endif %}
+</div>
+{% endblock %}
