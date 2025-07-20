@@ -86,6 +86,7 @@ def home():
 def login_home():
     return render_template("login_home.html")
 
+
 @app.route("/index", methods=["GET", "POST"])
 def index():
     error = None
@@ -168,12 +169,20 @@ def search():
     message = None
 
     if request.method == "POST":
-        roll = request.form.get("roll")
+        roll = request.form.get("roll").strip()
+
+        # Check if the workstation is allocated
         result = Workstation.query.filter_by(roll=roll).first()
-        if not result:
-            message = f"No machine has been allocated for Roll Number: {roll}"
+
+        if result:
+            # Redirect to detailed student info page
+            return redirect(url_for('student_details', roll=roll))
+        else:
+            # Show not found message
+            message = f"❌ No machine has been allocated for Roll Number: {roll}"
 
     return render_template("search.html", result=result, message=message, layout="login_home.html")
+
 
 # @app.route("/utilization")
 # def utilization():
@@ -269,31 +278,96 @@ def utilization():
 
 
 
+# @app.route("/register", methods=["GET", "POST"])
+# def register():
+#     if request.method == "POST":
+#         email = request.form["email"]
+#         password = request.form["password"]
+
+#         # Check if user already exists
+#         existing_user = User.query.filter_by(email=email).first()
+#         if existing_user:
+#             flash("⚠️ Email already registered. Please login.", "warning")
+#             return redirect("/login")
+
+#         hashed_pw = generate_password_hash(password)
+
+#         # ✅ Auto-approve if email is admin
+#         is_admin = email.lower() == "admin@cse.iith.ac.in"
+
+#         user = User(email=email, password=hashed_pw, is_approved=is_admin)
+#         db.session.add(user)
+#         db.session.commit()
+
+#         flash("✅ Registered!" + (" You're auto-approved as Admin." if is_admin else " Please wait for admin approval."))
+#         return redirect("/login")
+
+#     return render_template("register.html")
+from datetime import datetime
+from flask import render_template, request, redirect, flash
+from werkzeug.security import generate_password_hash
+from models import User, db
+
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
         email = request.form["email"]
         password = request.form["password"]
+        confirm_password = request.form["confirm_password"]
 
-        # Check if user already exists
+        # Validation
+        if not email.endswith("@cse.iith.ac.in"):
+            flash("Only @cse.iith.ac.in emails are allowed.", "danger")
+            return redirect("/register")
+
+        if len(password) < 6:
+            flash("Password must be at least 6 characters long.", "danger")
+            return redirect("/register")
+
+        if password != confirm_password:
+            flash("Passwords do not match.", "danger")
+            return redirect("/register")
+
+        # Check for duplicate
         existing_user = User.query.filter_by(email=email).first()
         if existing_user:
             flash("⚠️ Email already registered. Please login.", "warning")
             return redirect("/login")
 
-        hashed_pw = generate_password_hash(password)
-
-        # ✅ Auto-approve if email is admin
         is_admin = email.lower() == "admin@cse.iith.ac.in"
 
-        user = User(email=email, password=hashed_pw, is_approved=is_admin)
-        db.session.add(user)
+        new_user = User(
+            email=email,
+            password=generate_password_hash(password),
+            is_approved=is_admin,
+            approved_at=datetime.utcnow() if is_admin else None,
+            registered_at=datetime.utcnow()
+        )
+        db.session.add(new_user)
         db.session.commit()
 
         flash("✅ Registered!" + (" You're auto-approved as Admin." if is_admin else " Please wait for admin approval."))
         return redirect("/login")
 
     return render_template("register.html")
+
+from flask_login import login_required, current_user
+from flask import render_template
+from models import User  # Ensure User model is imported
+
+@app.route('/registered_users')
+@login_required
+def registered_users():
+    if current_user.email != "admin@cse.iith.ac.in":
+        flash("Access denied.", "danger")
+        return redirect("/login_home")
+
+    users = User.query.order_by(User.registered_at.desc()).all()
+    return render_template("registered_users.html", all_users=users)
+
+
+
 
 from flask import flash, redirect, url_for
 from flask_login import login_user
@@ -305,18 +379,23 @@ def login():
         password = request.form["password"]
 
         user = User.query.filter_by(email=email).first()
+
         if user and check_password_hash(user.password, password):
             if not user.is_approved:
-                flash("⚠️ Awaiting admin approval.")
+                flash("⚠️ Awaiting admin approval.", "warning")
+                return redirect(url_for("login"))
+            if not user.is_active:
+                flash("🚫 Your account has been blocked by the admin.", "danger")
                 return redirect(url_for("login"))
             login_user(user)
-            flash("✅ Logged in successfully.")
+            flash("✅ Logged in successfully.", "success")
             return redirect(url_for("login_home"))
         else:
-            flash("❌ Invalid credentials.")
+            flash("❌ Invalid credentials.", "danger")
             return redirect(url_for("login"))
 
     return render_template("login.html")
+
 
 @app.route("/logout")
 @login_required
@@ -361,13 +440,66 @@ def reset_password(token):
 
     return render_template("reset_password.html")
 
-@app.route("/admin/approve")
+@app.route("/admin/approve", methods=["GET", "POST"])
 @login_required
 def approve_panel():
     if current_user.email != "admin@cse.iith.ac.in":
         return "Access Denied"
+
+    if request.method == "POST":
+        user_id = request.form.get("user_id")
+        action = request.form.get("action")
+        user = User.query.get(int(user_id))
+
+        if user:
+            if action == "approve":
+                user.is_approved = True
+                user.approved_at = datetime.utcnow()
+                flash(f"{user.email} approved.", "success")
+            elif action == "reject":
+                user.is_approved = False
+                user.approved_at = datetime.utcnow()
+                flash(f"{user.email} rejected.", "danger")
+            db.session.commit()
+
+        return redirect("/admin/approve")
+
+    # Show all pending users
     pending_users = User.query.filter_by(is_approved=False).all()
     return render_template("approve_users.html", users=pending_users)
+
+@app.route("/admin/toggle_user/<int:user_id>")
+@login_required
+def toggle_user(user_id):
+    if current_user.email != "admin@cse.iith.ac.in":
+        return "Access Denied"
+    
+    user = User.query.get_or_404(user_id)
+    if user.email == "admin@cse.iith.ac.in":
+        flash("Admin account cannot be blocked.")
+        return redirect(url_for("registered_users"))
+
+    user.is_active = not user.is_active
+    db.session.commit()
+    flash(f"{'Blocked' if not user.is_active else 'Unblocked'} {user.email}")
+    return redirect(url_for("registered_users"))
+
+
+@app.route("/admin/delete_user/<int:user_id>")
+@login_required
+def delete_user(user_id):
+    if current_user.email != "admin@cse.iith.ac.in":
+        return "Access Denied"
+
+    user = User.query.get_or_404(user_id)
+    if user.email == "admin@cse.iith.ac.in":
+        flash("Admin account cannot be deleted.")
+        return redirect(url_for("registered_users"))
+
+    db.session.delete(user)
+    db.session.commit()
+    flash(f"Deleted user: {user.email}")
+    return redirect(url_for("registered_users"))
 
 
 @app.route("/admin/approve/<int:user_id>")

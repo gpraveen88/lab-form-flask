@@ -119,8 +119,11 @@
         {"name": "Slurm Facility", "icon": "⚙️", "url": "/slurm/check"},
         {"name": "Students-Directory", "icon": "🔍", "url": "/students_directory"},
       ] %}
-     {% if current_user.is_authenticated and current_user.email == 'admin@cse.iith.ac.in' %}
-  {% set tools = tools + [{"name": "Approve Users", "icon": "✅", "url": "/admin/approve"}] %}
+    {% if current_user.is_authenticated and current_user.email == 'admin@cse.iith.ac.in' %}
+  {% set tools = tools + [
+      {"name": "Approve Users", "icon": "✅", "url": "/admin/approve"},
+      {"name": "Registered Users", "icon": "👥", "url": "/registered_users"}
+    ] %}
 {% endif %}
 {% set tools = tools + [{"name": "User Settings", "icon": "🛠️", "url": "/user/settings"}] %}
       {% for tool in tools %}

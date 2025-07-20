@@ -6,15 +6,18 @@ from datetime import datetime
 db = SQLAlchemy()
 
 
+
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(150), unique=True, nullable=False)
     password = db.Column(db.String(150), nullable=False)
-
-    # NEW FIELDS FOR ADMIN AND RESET
     is_approved = db.Column(db.Boolean, default=False)
     reset_token = db.Column(db.String(100), nullable=True)
     reset_token_expiry = db.Column(db.DateTime, nullable=True)
+
+    registered_at = db.Column(db.DateTime, default=datetime.utcnow)
+    approved_at = db.Column(db.DateTime, nullable=True)
+    is_active = db.Column(db.Boolean, default=True)  # New field to block login
 
 
 class Workstation(db.Model):
