@@ -396,6 +396,10 @@ def login():
 
     return render_template("login.html")
 
+@app.route('/about')
+def about_us():
+    return render_template('about_us.html') 
+
 
 @app.route("/logout")
 @login_required
@@ -528,6 +532,7 @@ def reject_user(user_id):
 from flask_login import current_user
 
 @app.route("/cse_labs")
+@login_required
 def cse_labs():
     layout_template = "login_home.html" if current_user.is_authenticated else "base.html"
     return render_template("cse_labs.html", layout=layout_template)
@@ -543,16 +548,25 @@ from flask_login import login_required, current_user
 def inventory():
     return render_template("inventory.html", layout="login_home.html")
 
+from datetime import datetime
+from flask import request, render_template, redirect, url_for, flash
+from flask_login import login_required
+
+
 @app.route("/equipment_entry", methods=["GET", "POST"])
 @login_required
 def equipment_entry():
     if request.method == "POST":
         form = request.form
+
         name = form["name"]
         category = form["category"]
         manufacturer = form["manufacturer"]
         model = form["model"]
         serial_number = form["serial_number"]
+        invoice_number = form.get("invoice_number", "")
+        cost_per_unit = float(form.get("cost_per_unit", 0))  # safe default
+        warranty_expiry = form.get("warranty_expiry", "")
         location = form["location"]
         purchase_date = form["purchase_date"]
         status = form["status"]
@@ -560,19 +574,22 @@ def equipment_entry():
         intender_name = form["intender_name"]
         quantity = int(form["quantity"])
 
-        # 🧠 Generate Department Unique Code
+        # Generate department code
         today_str = datetime.now().strftime("%Y%m%d")
         prefix = f"CSE/{today_str}/{category}"
         existing = Equipment.query.filter(Equipment.department_code.like(f"{prefix}/%")).count()
         department_code = f"{prefix}/{str(existing + 1).zfill(3)}"
 
-        # ✅ Save to DB
+        # Create new record
         new_equipment = Equipment(
             name=name,
             category=category,
             manufacturer=manufacturer,
             model=model,
             serial_number=serial_number,
+            invoice_number=invoice_number,
+            cost_per_unit=cost_per_unit,
+            warranty_expiry=warranty_expiry,
             location=location,
             purchase_date=purchase_date,
             status=status,
@@ -588,6 +605,7 @@ def equipment_entry():
         return redirect(url_for("equipment_entry"))
 
     return render_template("equipment_entry.html", layout="login_home.html")
+
 
 from flask import send_file
 import pandas as pd
@@ -964,5 +982,55 @@ def students_directory():
 
 
 
+@app.route('/equipment/edit/<int:id>', methods=['GET', 'POST'])
+def edit_equipment(id):
+    item = Equipment.query.get_or_404(id)
+
+    if request.method == 'POST':
+        item.name = request.form['name']
+        item.category = request.form['category']
+        item.manufacturer = request.form['manufacturer']
+        item.model = request.form['model']
+        item.serial_number = request.form['serial_number']
+        item.location = request.form['location']
+        item.purchase_date = request.form['purchase_date']
+        item.status = request.form['status']
+        item.po_date = request.form['po_date']
+        item.intender_name = request.form['intender_name']
+        item.quantity = int(request.form['quantity'])
+        item.department_code = request.form['department_code']
+
+        db.session.commit()
+        return redirect(url_for('equipment_list'))
+
+    return render_template('edit_equipment.html', item=item)
+
+@app.route('/equipment/delete/<int:id>', methods=['GET'])
+def delete_equipment(id):
+    item = Equipment.query.get_or_404(id)
+    db.session.delete(item)
+    db.session.commit()
+    return redirect(url_for('equipment_list'))
+
+@app.route("/inventory_search", methods=["GET"])
+@login_required
+def inventory_search():
+    category = request.args.get("category", "").strip()
+    status = request.args.get("status", "").strip()
+    serial_number = request.args.get("serial_number", "").strip()
+
+    query = Equipment.query
+
+    if category:
+        query = query.filter(Equipment.category == category)
+    if status:
+        query = query.filter(Equipment.status == status)
+    if serial_number:
+        query = query.filter(Equipment.serial_number.ilike(f"%{serial_number}%"))
+
+    equipment_list = query.all()
+
+    return render_template("inventory_search.html", equipment_list=equipment_list)
+
 if __name__ == "__main__":
-    app.run(debug=True, port=5006)
+    app.run(host="0.0.0.0",debug=True, port=5006)

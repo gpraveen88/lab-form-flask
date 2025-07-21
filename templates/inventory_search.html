@@ -1,0 +1,89 @@
+{% extends "login_home.html" %}
+{% block title %}Inventory Search{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-6">
+  <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">Inventory Equipment Search</h1>
+
+  <!-- Filter Panel -->
+  <form method="GET" action="/inventory_search" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 bg-white shadow p-4 rounded-lg mb-6">
+    <div>
+      <label class="block text-sm font-medium text-gray-700">Category</label>
+      <select name="category" class="w-full mt-1 px-3 py-2 border rounded">
+        <option value="">All</option>
+        <option>CPU</option>
+        <option>Monitor</option>
+        <option>Server</option>
+        <option>Printer</option>
+        <option>GPU</option>
+        <option>Mouse</option>
+        <option>Keyboard</option>
+        <option>NIC card</option>
+        <option>Switch</option>
+        <option>Router</option>
+        <option>Network Hub</option>
+        <option>Others</option>
+      </select>
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium text-gray-700">Status</label>
+      <select name="status" class="w-full mt-1 px-3 py-2 border rounded">
+        <option value="">All</option>
+        <option>Available</option>
+        <option>In Use</option>
+        <option>Spare</option>
+        <option>Under Repair</option>
+        <option>Damaged</option>
+        <option>Scrap</option>
+        <option>Retired</option>
+      </select>
+    </div>
+
+    <div class="md:col-span-2 lg:col-span-1">
+      <label class="block text-sm font-medium text-gray-700">Search by Serial Number</label>
+      <input type="text" name="serial_number" placeholder="Enter Serial No." class="w-full mt-1 px-3 py-2 border rounded" />
+    </div>
+
+    <div class="md:col-span-1 flex items-end">
+      <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full">Search</button>
+    </div>
+  </form>
+
+  <!-- Results Table -->
+  {% if equipment_list %}
+  <div class="overflow-x-auto">
+    <table class="min-w-full bg-white border border-gray-300">
+      <thead>
+        <tr class="bg-gray-100">
+          <th class="py-2 px-4 border">Name</th>
+          <th class="py-2 px-4 border">Category</th>
+          <th class="py-2 px-4 border">Manufacturer</th>
+          <th class="py-2 px-4 border">Model</th>
+          <th class="py-2 px-4 border">Serial Number</th>
+          <th class="py-2 px-4 border">Status</th>
+          <th class="py-2 px-4 border">Location</th>
+          <th class="py-2 px-4 border">Intender</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in equipment_list %}
+        <tr class="text-sm text-gray-800 hover:bg-gray-50">
+          <td class="py-2 px-4 border">{{ item.name }}</td>
+          <td class="py-2 px-4 border">{{ item.category }}</td>
+          <td class="py-2 px-4 border">{{ item.manufacturer }}</td>
+          <td class="py-2 px-4 border">{{ item.model }}</td>
+          <td class="py-2 px-4 border">{{ item.serial_number }}</td>
+          <td class="py-2 px-4 border">{{ item.status }}</td>
+          <td class="py-2 px-4 border">{{ item.location }}</td>
+          <td class="py-2 px-4 border">{{ item.intender_name }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <p class="text-gray-600 text-center mt-8">No equipment found matching your search criteria.</p>
+  {% endif %}
+</div>
+{% endblock %}

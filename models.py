@@ -69,6 +69,9 @@ class Equipment(db.Model):
     manufacturer = db.Column(db.String(100), nullable=False)
     model = db.Column(db.String(100), nullable=False)
     serial_number = db.Column(db.String(100), nullable=False)
+    invoice_number = db.Column(db.String(100), nullable=True)         # ✅ NEW
+    cost_per_unit = db.Column(db.Float, nullable=True)                # ✅ NEW
+    warranty_expiry = db.Column(db.String(20), nullable=True)  
     location = db.Column(db.String(100), nullable=False)
     purchase_date = db.Column(db.String(20), nullable=False)
     status = db.Column(db.String(20), nullable=False)
