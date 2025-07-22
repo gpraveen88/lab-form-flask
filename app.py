@@ -116,9 +116,11 @@ def index():
         db.session.commit()
 
         send_to_google_sheet(form_data)
-        return "✅ Submitted Successfully"
+
+        return render_template("index.html", success=True)
 
     return render_template("index.html")
+
 
 @app.route("/records")
 def view_records():
@@ -223,6 +225,61 @@ from flask import render_template
 from collections import defaultdict
 from models import Workstation  # Adjust this import to match your structure
 
+# @app.route("/utilization")
+# def utilization():
+#     all_records = Workstation.query.all()
+
+#     lab_capacities = {
+#         "CS-107": 43,
+#         "CS-108": 21,
+#         "CS-109": 114,
+#         "CS-207": 30,
+#         "CS-208": 25,
+#         "CS-209": 142,
+#         "CS-317": 25,
+#         "CS-318": 25,
+#         "CS-319": 32,
+#         "CS-320": 27,
+#         "CS-411": 25,
+#         "CS-412": 33
+#     }
+
+#     lab_counts = defaultdict(int)
+#     used_seats_map = defaultdict(list)
+
+#     for r in all_records:
+#         lab_counts[r.room_lab_name] += 1
+#         try:
+#             seat_no = int(r.cubicle_no)
+#             hover_name = "Occupied"
+#             if r.name and r.roll:
+#                 hover_name = f"{r.name} ({r.roll})"
+#             elif r.name:
+#                 hover_name = r.name
+#             elif r.roll:
+#                 hover_name = r.roll
+
+#             used_seats_map[r.room_lab_name].append((seat_no, hover_name))
+#         except (ValueError, TypeError):
+#             pass  # Invalid seat number; skip
+
+#     lab_stats = {}
+#     for lab, total in lab_capacities.items():
+#         used = lab_counts.get(lab, 0)
+#         available = total - used
+#         used_seats = dict(used_seats_map.get(lab, []))  # {seat_no: hover_text}
+#         lab_stats[lab] = {
+#             "total": total,
+#             "used": used,
+#             "available": available,
+#             "used_seats": used_seats
+#         }
+
+#     return render_template("utilization.html", lab_stats=lab_stats)
+
+from flask import render_template
+from collections import defaultdict
+
 @app.route("/utilization")
 def utilization():
     all_records = Workstation.query.all()
@@ -262,10 +319,14 @@ def utilization():
             pass  # Invalid seat number; skip
 
     lab_stats = {}
+    total_seats = 0
+    total_used = 0
+
     for lab, total in lab_capacities.items():
         used = lab_counts.get(lab, 0)
         available = total - used
         used_seats = dict(used_seats_map.get(lab, []))  # {seat_no: hover_text}
+
         lab_stats[lab] = {
             "total": total,
             "used": used,
@@ -273,9 +334,36 @@ def utilization():
             "used_seats": used_seats
         }
 
-    return render_template("utilization.html", lab_stats=lab_stats)
+        total_seats += total
+        total_used += used
+
+    total_available = total_seats - total_used
+    occupancy_percent = round((total_used / total_seats * 100), 1) if total_seats else 0
+    print("======== DEBUG: LAB STATS ========")
+    for lab, stats in lab_stats.items():
+        print(f"{lab}: total={stats['total']}, used={stats['used']}, available={stats['available']}")
+    print(f"TOTAL: {total_seats}, USED: {total_used}, AVAILABLE: {total_available}, OCCUPANCY: {occupancy_percent}%")
+    print("===================================")
+
+    return render_template(
+        "utilization.html",
+        lab_stats=lab_stats,
+        total_seats=total_seats,
+        total_used=total_used,
+        total_available=total_available,
+        occupancy_percent=occupancy_percent
+    )
+
+@app.route("/alloted_machines")
+def alloted_machines():
+    # Get only records where student name or roll is not null (i.e., allotted)
+     allotted_records = Workstation.query.filter(
+        (Workstation.name != None) | (Workstation.roll != None)
+    ).all()
+     allotted_records.sort(key=lambda r: (r.room_lab_name or "", r.cubicle_no or ""))
 
 
+     return render_template("alloted_machines.html", records=allotted_records)
 
 
 # @app.route("/register", methods=["GET", "POST"])

@@ -2,14 +2,27 @@
 {% block title %}Lab Utilization{% endblock %}
 
 {% block content %}
-<div class="max-w-7xl mx-auto py-12 px-4">
+<style>
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+.blink {
+  animation: blink 1s infinite;
+}
+</style>
 
   <!-- Header -->
-  <div class="bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl shadow-lg py-8 px-6 mb-10 text-center">
+  <div class="bg-gradient-to-r from-blue-500 to-emerald-600 rounded-xl shadow-lg py-8 px-6 mb-10 text-center">
     <h2 class="text-4xl font-extrabold text-white mb-2">🖥️ Lab Utilization Overview</h2>
-    <p class="text-green-100 text-sm">Live seat status in each lab — total, used, and available systems with seat numbers.</p>
-  </div>
-
+    <p class="text-green-100 text-sm mb-5">Live seat status in each lab — total, used, and available systems with seat numbers.</p>
+     <div class="text-2xl font-extrabold text-white blink mb-2 gap-8">
+        <strong>Total Seats:</strong> {{ total_seats }} &nbsp; | &nbsp;
+        <strong>Used:</strong> {{ total_used }} &nbsp; | &nbsp;
+        <strong>Available:</strong> {{ total_available }} &nbsp; | &nbsp;
+        <strong>{{ occupancy_percent }}%</strong> Occupied
+    </div>
+</div>
   <!-- Utilization Cards -->
   <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
     {% for lab, stats in lab_stats.items() %}
@@ -19,23 +32,25 @@
       <div class="mb-4">
         <h3 class="text-xl font-semibold text-green-700 mb-1">{{ lab }}</h3>
         <div class="text-sm text-gray-700">
-          <strong>Total:</strong> {{ stats.total }} &nbsp; | &nbsp;
-          <strong>Used:</strong> {{ stats.used }} &nbsp; | &nbsp;
-          <strong>Free:</strong> {{ stats.available }} &nbsp; | &nbsp;
-          <strong>{{ (stats.used / stats.total * 100) | round(1) if stats.total else 0 }}%</strong> Occupied
+         <strong>Total:</strong> {{ stats["total"] }} &nbsp; | &nbsp;
+<strong>Used:</strong> {{ stats["used"] }} &nbsp; | &nbsp;
+<strong>Free:</strong> {{ stats["available"] }} &nbsp; | &nbsp;
+<strong>{{ (stats["used"] / stats["total"] * 100) | round(1) if stats["total"] else 0 }}%</strong> Occupied
+
         </div>
       </div>
 
       <!-- Seating Grid -->
       <div class="border rounded-lg p-3 bg-gray-50">
         <div class="grid grid-cols-10 gap-1 text-center text-xs font-medium">
-          {% for i in range(1, stats.total + 1) %}
-            {% if i in stats.used_seats %}
-              <div class="bg-red-500 text-white rounded-sm py-1" title="Occupied Seat {{ i }}">{{ i }}</div>
-            {% else %}
-              <div class="bg-green-500 text-white rounded-sm py-1" title="Available Seat {{ i }}">{{ i }}</div>
-            {% endif %}
-          {% endfor %}
+         {% for i in range(1, stats["total"] + 1) %}
+  {% if i in stats["used_seats"] %}
+    <div class="bg-red-500 text-white rounded-sm py-1" title="{{ stats['used_seats'][i] }}">{{ i }}</div>
+  {% else %}
+    <div class="bg-green-500 text-white rounded-sm py-1" title="Available Seat {{ i }}">{{ i }}</div>
+  {% endif %}
+{% endfor %}
+
         </div>
       </div>
 

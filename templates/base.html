@@ -48,72 +48,65 @@
 <body>
     <div class="min-h-screen flex flex-col">
         <!-- Navigation Bar -->
-        <nav class="bg-white shadow-md sticky top-0 z-50">
-            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between h-16">
-                    <div class="flex items-center">
-                        <div class="flex-shrink-0 flex items-center">
-                           <img src="https://iith.ac.in/assets/images/logo.png" height="80" width="100"/>
-                            <span class="ml-4 text-xl font-bold text-gray-800">Department of Computer Science and Engineering</span>
-                        </div>
+        <nav class="bg-white shadow-md sticky top-0 z-50 w-full">
+            <div class="px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-20">
+                    <div class="flex items-center space-x-4">
+                        <img src="https://iith.ac.in/assets/images/logo.png" class="h-10 w-auto" alt="IITH Logo"/>
+                        <span class="text-base sm:text-lg md:text-xl lg:text-1xl font-bold text-gray-800">
+                            Department of Computer Science and Engineering
+                        </span>
                     </div>
-                    <div class="hidden md:flex md:items-center md:space-x-2">
-                        <a href="/" class="nav-link active text-gray-800 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors duration-200" data-page="home">Home</a>
-                        <a href="/cse_labs" class="nav-link text-gray-600 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors duration-200" data-page="labs">Cse-Labs</a>
-                        
-                        <!-- <a href="/Gallery" class="nav-link text-gray-600 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors duration-200" data-page="inventory">Gallery</a>
-                        <a href="/facilities" class="nav-link text-gray-600 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors duration-200" data-page="gallery">Facilities</a> -->
-                        <a href="/contact_us" class="nav-link text-gray-600 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors duration-200" data-page="contact">Contact Us</a>
-                        <a href="/login" class="nav-link text-gray-600 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors duration-200" data-page="contact">Login</a>
+                    <div class="hidden md:flex space-x-2">
+                        <a href="/" class="nav-link active text-gray-800 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors duration-200">Home</a>
+                        <a href="/cse_labs" class="nav-link text-gray-600 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors duration-200">Cse-Labs</a>
+                        <a href="/contact_us" class="nav-link text-gray-600 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors duration-200">Contact Us</a>
+                        <a href="/login" class="nav-link text-gray-600 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors duration-200">Login</a>
                     </div>
-                    <div class="flex md:hidden items-center">
-                        <button id="mobile-menu-butcston" class="text-gray-500 hover:text-blue-600 focus:outline-none">
+                    <div class="md:hidden">
+                        <button id="mobile-menu-button" class="text-gray-500 hover:text-blue-600 focus:outline-none">
                             <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                             </svg>
                         </button>
                     </div>
                 </div>
+                <!-- Responsive Menu Placeholder -->
+                <div id="mobile-menu" class="md:hidden hidden mt-2 space-y-2">
+                    <a href="/" class="block nav-link text-gray-800 hover:text-blue-600 px-3 py-2">Home</a>
+                    <a href="/cse_labs" class="block nav-link text-gray-600 hover:text-blue-600 px-3 py-2">Cse-Labs</a>
+                    <a href="/contact_us" class="block nav-link text-gray-600 hover:text-blue-600 px-3 py-2">Contact Us</a>
+                    <a href="/login" class="block nav-link text-gray-600 hover:text-blue-600 px-3 py-2">Login</a>
+                </div>
             </div>
-            
+        </nav>
 
-   <!-- {% with messages = get_flashed_messages() %}
-  {% if messages %}
-    <div class="mx-auto max-w-2xl mt-4 px-4">
-      <div class="flex items-center bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 p-4 rounded-md shadow-md">
-        <svg class="w-5 h-5 mr-3 text-yellow-500" fill="none" stroke="currentColor" stroke-width="2"
-             viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round"
-                d="M13 16h-1v-4h-1m1-4h.01M12 2a10 10 0 1010 10A10 10 0 0012 2z"/>
-        </svg>
-        <span class="text-sm font-medium">{{ messages[0] }}</span>
-      </div>
+        <script>
+          document.getElementById('mobile-menu-button').addEventListener('click', () => {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+          });
+        </script>
+
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <div id="alert-box" class="max-w-md mx-auto mb-4 bg-red-50 text-red-800 border border-orange-200 rounded-lg px-4 py-3 flex items-start justify-between shadow-sm">
+              <div class="flex items-center">
+                <svg class="w-5 h-5 mr-2 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M12 2a10 10 0 100 20 10 10 0 000-20z"/>
+                </svg>
+                <span class="text-sm">{{ messages[0] }}</span>
+              </div>
+              <button onclick="this.parentElement.remove()" class="text-red-400 hover:text-red-600 transition">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 8.586l4.95-4.95a1 1 0 111.414 1.414L11.414 10l4.95 4.95a1 1 0 01-1.414 1.414L10 11.414l-4.95 4.95a1 1 0 01-1.414-1.414L8.586 10l-4.95-4.95A1 1 0 115.05 3.636L10 8.586z" clip-rule="evenodd" />
+                </svg>
+              </button>
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
     </div>
-  {% endif %}
-{% endwith %} -->
-{% with messages = get_flashed_messages() %}
-  {% if messages %}
-    <div id="alert-box" class="max-w-md mx-auto mb-4 bg-red-50 text-red-800 border border-orange-200 rounded-lg px-4 py-3 flex items-start justify-between shadow-sm">
-      <div class="flex items-center">
-        <svg class="w-5 h-5 mr-2 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M12 8v4m0 4h.01M12 2a10 10 0 100 20 10 10 0 000-20z"/>
-        </svg>
-        <span class="text-sm">{{ messages[0] }}</span>
-      </div>
-      <button onclick="this.parentElement.remove()" class="text-red-400 hover:text-red-600 transition">
-        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-          <path fill-rule="evenodd"
-                d="M10 8.586l4.95-4.95a1 1 0 111.414 1.414L11.414 10l4.95 4.95a1 1 0 01-1.414 1.414L10 11.414l-4.95 4.95a1 1 0 01-1.414-1.414L8.586 10l-4.95-4.95A1 1 0 115.05 3.636L10 8.586z"
-                clip-rule="evenodd" />
-        </svg>
-      </button>
-    </div>
-  {% endif %}
-{% endwith %}
-
-
-    {% block content %}{% endblock %}
-  </div>
 </body>
 </html>
