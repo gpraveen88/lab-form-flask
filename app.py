@@ -476,7 +476,7 @@ def login():
                 flash("🚫 Your account has been blocked by the admin.", "danger")
                 return redirect(url_for("login"))
             login_user(user)
-            flash("✅ Logged in successfully.", "success")
+            # flash("✅ Logged in successfully.", "success")
             return redirect(url_for("login_home"))
         else:
             flash("❌ Invalid credentials.", "danger")

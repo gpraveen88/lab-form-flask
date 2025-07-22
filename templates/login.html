@@ -1,50 +1,50 @@
-
-
 {% extends "base.html" %}
 {% block title %}Login{% endblock %}
 
 {% block content %}
 <style>
-  .login-background {
-    background: linear-gradient(135deg, #667eea, #764ba2);
+  .login-page {
+    position: relative;
     min-height: 100vh;
-    padding-top: 0rem;
+    background-image: url("{{ url_for('static', filename='images/bui2.jpg') }}");
+    background-size: cover;
+    background-position: center;
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-
-  .login-container {
-    display: flex;
-    gap: 2rem;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    max-width: 1000px;
-    width: 100%;
     padding: 2rem;
+   
   }
 
-  .glass-card {
-    backdrop-filter: blur(12px);
-    background: rgba(255, 255, 255, 0.75);
+  .login-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6); /* dark overlay for readability */
+    z-index: 1;
+  }
+
+  .login-card {
+    position: relative;
+    z-index: 2;
+    backdrop-filter: blur(15px);
+    background: rgb(244, 250, 250);
     border-radius: 1rem;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     padding: 2.5rem;
     width: 100%;
     max-width: 400px;
     color: #333;
   }
 
-  .glass-card h2 {
-    font-size: 1.75rem;
-    font-weight: 600;
+  .login-card h2 {
+    font-size: 2rem;
+    font-weight: 700;
     margin-bottom: 1rem;
     text-align: center;
     color: #4f46e5;
   }
 
-  .glass-card p {
+  .login-card p {
     font-size: 0.95rem;
     text-align: center;
     margin-bottom: 2rem;
@@ -59,7 +59,7 @@
     width: 100%;
     padding: 0.75rem 1rem;
     border-radius: 0.5rem;
-    background: rgba(255, 255, 255, 0.952);
+    background: rgba(255, 255, 255, 0.95);
     color: #333;
     border: 1px solid #ccc;
     font-size: 1rem;
@@ -68,7 +68,7 @@
   .form-group input:focus {
     outline: none;
     border-color: #4f46e5;
-    background: rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.9);
   }
 
   .login-btn {
@@ -101,57 +101,46 @@
     text-decoration: underline;
   }
 
-  .login-image {
-    max-width: 400px;
-    width: 100%;
-  }
-
   @media (max-width: 768px) {
-    .login-container {
-      flex-direction: column;
-    }
-
-    .login-image {
-      max-width: 300px;
+    .login-card {
+      padding: 2rem;
     }
   }
 </style>
 
-<div class="login-background">
-  <div class="login-container">
-    <!-- Login Image -->
-    <img src="{{ url_for('static', filename='images/login2.png') }}" alt="Login illustration" class="login-image">
+<div class="login-page">
+  <!-- Dark overlay -->
+  <div class="login-overlay"></div>
 
-    <!-- Login Card -->
-    <div class="glass-card">
-      <h2>Welcome Back</h2>
-      <p>Login to access your dashboard</p>
+  <!-- Glass login card -->
+  <div class="login-card">
+    <h2>Welcome Back</h2>
+    <p>Login to access your dashboard</p>
 
-      <form method="POST" action="/login">
-        <div class="form-group">
-          <input name="email" type="email" placeholder="Email" required>
-        </div>
-        <div class="form-group">
-          <input name="password" type="password" placeholder="Password" required>
-        </div> 
-       <div class="flex justify-end mb-4">
-  <a href="{{ url_for('reset_request') }}" class="text-sm text-indigo-600 hover:underline transition">
-    Forgot Password?
-  </a>
-</div>
-
-        <button type="submit" class="login-btn">Sign In</button>
-      </form>
-
-      <div class="register-text">
-        Don't have an account? <a href="/register">Register here</a>
+    <form method="POST" action="/login">
+      <div class="form-group">
+        <input name="email" type="email" placeholder="Email" required>
       </div>
+      <div class="form-group">
+        <input name="password" type="password" placeholder="Password" required>
+      </div>
+      <div class="flex justify-end mb-4">
+        <a href="{{ url_for('reset_request') }}" class="text-sm text-indigo-600 hover:underline transition">
+          Forgot Password?
+        </a>
+      </div>
+
+      <button type="submit" class="login-btn">Sign In</button>
+    </form>
+
+    <div class="register-text">
+      Don't have an account? <a href="/register">Register here</a>
     </div>
   </div>
 </div>
- <!-- Optional Footer -->
-    <footer class="bg-white text-center py-4 text-gray-500 text-sm">
-      © {{ current_year or "2025" }} CSE Department, IITH. All rights reserved.
-    </footer>
-  </div>
+
+<!-- Footer -->
+<footer class="bg-white text-center py-4 text-gray-500 text-sm">
+  © {{ current_year or "2025" }} CSE Department, IITH. All rights reserved.
+</footer>
 {% endblock %}
