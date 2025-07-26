@@ -62,6 +62,23 @@ class Workstation(db.Model):
     monitor_serial = db.Column(db.String(100))
 
 
+# class Equipment(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     name = db.Column(db.String(100), nullable=False)
+#     category = db.Column(db.String(50), nullable=False)
+#     manufacturer = db.Column(db.String(100), nullable=False)
+#     model = db.Column(db.String(100), nullable=False)
+#     serial_number = db.Column(db.String(100), nullable=False)
+#     invoice_number = db.Column(db.String(100), nullable=True)         # ✅ NEW
+#     cost_per_unit = db.Column(db.Float, nullable=True)                # ✅ NEW
+#     warranty_expiry = db.Column(db.String(20), nullable=True)  
+#     location = db.Column(db.String(100), nullable=False)
+#     purchase_date = db.Column(db.String(20), nullable=False)
+#     status = db.Column(db.String(20), nullable=False)
+#     po_date = db.Column(db.String(20), nullable=False)
+#     intender_name = db.Column(db.String(100), nullable=False)
+#     quantity = db.Column(db.Integer, nullable=False)
+#     department_code = db.Column(db.String(100), unique=True, nullable=False)
 class Equipment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
@@ -69,9 +86,9 @@ class Equipment(db.Model):
     manufacturer = db.Column(db.String(100), nullable=False)
     model = db.Column(db.String(100), nullable=False)
     serial_number = db.Column(db.String(100), nullable=False)
-    invoice_number = db.Column(db.String(100), nullable=True)         # ✅ NEW
-    cost_per_unit = db.Column(db.Float, nullable=True)                # ✅ NEW
-    warranty_expiry = db.Column(db.String(20), nullable=True)  
+    invoice_number = db.Column(db.String(100), nullable=True)
+    cost_per_unit = db.Column(db.Float, nullable=True)
+    warranty_expiry = db.Column(db.String(20), nullable=True)
     location = db.Column(db.String(100), nullable=False)
     purchase_date = db.Column(db.String(20), nullable=False)
     status = db.Column(db.String(20), nullable=False)
@@ -79,6 +96,18 @@ class Equipment(db.Model):
     intender_name = db.Column(db.String(100), nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
     department_code = db.Column(db.String(100), unique=True, nullable=False)
+
+    # 🔗 NEW FIELD to assign equipment to a student (via roll number)
+    assigned_to_roll = db.Column(
+    db.String(20),
+    db.ForeignKey('workstation.roll', name='fk_equipment_assigned_to_roll'),
+    nullable=True
+)
+    assigned_date = db.Column(db.DateTime, nullable=True)
+    assigned_by = db.Column(db.String(150), nullable=True)  # Store current_user.email
+
+    student = db.relationship('Workstation', backref='assigned_equipment')
+
 
 class ProvisioningRequest(db.Model):
     id = db.Column(db.Integer, primary_key=True)

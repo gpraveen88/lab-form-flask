@@ -1,0 +1,37 @@
+{% extends "login_home.html" %}
+{% block title %}Assign Equipment{% endblock %}
+
+{% block content %}
+<section class="py-10 px-6 max-w-3xl mx-auto">
+  <div class="bg-white p-6 shadow rounded border border-gray-300">
+    <h2 class="text-2xl font-semibold text-indigo-700 mb-4">Assign Equipment</h2>
+
+    <p class="mb-4"><strong>Equipment:</strong> {{ equipment.name }} ({{ equipment.serial_number }})</p>
+
+    <form method="POST">
+      <div class="mb-4">
+        <label for="assigned_to_roll" class="block text-sm font-medium text-gray-700 mb-1">Select Student:</label>
+        <select name="assigned_to_roll" id="assigned_to_roll"
+                class="w-full border border-gray-300 rounded px-4 py-2">
+          <option value="">-- Unassign Equipment --</option>
+          {% for student in students %}
+            <option value="{{ student.roll }}"
+              {% if equipment.assigned_to_roll == student.roll %}selected{% endif %}>
+              {{ student.name }} ({{ student.roll }})
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="mt-6">
+        <button type="submit"
+                class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded">
+          Save Assignment
+        </button>
+        <a href="{{ url_for('equipment_list') }}"
+           class="ml-4 text-indigo-600 hover:underline">Cancel</a>
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock %}

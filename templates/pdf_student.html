@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Details - {{ student.name }}</title>
+  <style>
+   
+  @page {
+    size: A4;
+    margin: 10mm;
+  }
+
+  body {
+    font-family: sans-serif;
+    font-size: 10px;
+    margin: 0;
+    padding: 0;
+  }
+
+  h2, h3 {
+    font-size: 11px;
+    margin-bottom: 6px;
+    border-bottom: 1px solid #999;
+    padding-bottom: 4px;
+    color: #2c3e50;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 12px;
+  }
+
+table th, table td {
+  width: 50%;              /* Equal column widths */
+  font-size: 8px;
+  border: 1px solid #888;
+  padding: 5px 7px;
+  vertical-align: top;
+  text-align: left;
+  word-wrap: break-word;   /* Allows wrapping of long content */
+}
+
+  table th {
+    background-color: #eee;
+    font-weight: bold;
+  }
+
+  img {
+    width: 70px;
+    height: 70px;
+    border-radius: 6px;
+    object-fit: cover;
+  }
+
+  .signatures {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 9px;
+  }
+
+  .signature-box {
+    width: 45%;
+    text-align: center;
+  }
+
+  .signature-box p {
+    border-top: 1px solid #000;
+    margin-top: 40px;
+    padding-top: 5px;
+  }
+
+
+table.three-cols .img-cell {
+  width: 20%;
+}
+
+table.three-cols .label-cell {
+  width: 30%;
+  background-color: #eee;
+  font-weight: bold;
+}
+
+table.three-cols .value-cell {
+  width: 50%;
+}
+table.four-cols th,
+table.four-cols td {
+  width: 25%;
+}
+
+
+  </style>
+</head>
+<body>
+
+  <h2 style="text-align:center;font-size:15px;color: red;">Student & Workstation Details</h2>
+
+
+
+<table class="three-cols">
+  <tr>
+    <!-- Image column (rowspan for 7 rows) -->
+    <td class="img-cell" rowspan="7">
+      <img src="{{ url_for('static', filename='images/passport.png', _external=True) if not student.photo_url else student.photo_url }}"
+
+
+               alt="Student Photo"
+               class="w-48 h-48 object-cover rounded-lg border shadow"/>
+    </td>
+    <td class="label-cell">Name</td>
+    <td class="value-cell">{{ student.name }}</td>
+  </tr>
+  <tr><td class="label-cell">Roll Number</td><td class="value-cell">{{ student.roll }}</td></tr>
+  <tr><td class="label-cell">Course</td><td class="value-cell">{{ student.course }}</td></tr>
+  <tr><td class="label-cell">Year</td><td class="value-cell">{{ student.year }}</td></tr>
+  <tr><td class="label-cell">Email</td><td class="value-cell">{{ student.email }}</td></tr>
+  <tr><td class="label-cell">Phone</td><td class="value-cell">{{ student.phone }}</td></tr>
+</table>
+  <h3>Lab & System Details</h3>
+  <table>
+    <tr><th>Lab</th><td>{{ student.room_lab_name }}</td></tr>
+    <tr><th>Cubicle No</th><td>{{ student.cubicle_no }}</td></tr>
+    <tr><th>Faculty In-Charge</th><td>{{ student.faculty }}</td></tr>
+    <tr><th>Staff In-Charge</th><td>{{ student.staff_incharge }}</td></tr>
+    <tr><th>Manufacturer</th><td>{{ student.manufacturer or student.otherManufacturer }}</td></tr>
+    <tr><th>Model</th><td>{{ student.model }}</td></tr>
+    <tr><th>Serial No</th><td>{{ student.serial }}</td></tr>
+    <tr><th>OS</th><td>{{ student.os or student.otherOs }}</td></tr>
+    <tr><th>Processor</th><td>{{ student.processor }}</td></tr>
+    <tr><th>Cores</th><td>{{ student.cores }}</td></tr>
+    <tr><th>RAM</th><td>{{ student.ram or student.otherRam }}</td></tr>
+    <tr><th>GPU</th><td>{{ student.gpu }}</td></tr>
+    <tr><th>VRAM</th><td>{{ student.vram }}</td></tr>
+  </table>
+
+  <h3>Storage</h3>
+  <table>
+    <tr><th>Storage 1</th><td>{{ student.storage_type1 }} - {{ student.storage_capacity1 }}</td></tr>
+    <tr><th>Storage 2</th><td>{{ student.storage_type2 }} - {{ student.storage_capacity2 }}</td></tr>
+  </table>
+
+  <h3>Peripherals</h3>
+  <table>
+    <tr><th>Monitor</th><td>{% if student.monitor_provided == 'yes' %}Yes ({{ student.monitor_details or '' }}, {{ student.monitor_size or '' }}){% else %}No{% endif %}</td></tr>
+    <tr><th>Monitor Serial</th><td>{{ student.monitor_serial or 'N/A' }}</td></tr>
+    <tr><th>Keyboard</th><td>{% if student.keyboard_provided == 'yes' %}Yes ({{ student.keyboard_details or '' }}){% else %}No{% endif %}</td></tr>
+    <tr><th>Mouse</th><td>{% if student.mouse_provided == 'yes' %}Yes ({{ student.mouse_details or '' }}){% else %}No{% endif %}</td></tr>
+  </table>
+
+  <h3>Purchase & Usage</h3>
+  <table>
+    <tr><th>Issue Date</th><td>{{ student.issue_date }}</td></tr>
+    <tr><th>Required Till</th><td>{{ student.system_required_till }}</td></tr>
+    <tr><th>PO Date</th><td>{{ student.po_date }}</td></tr>
+    <tr><th>Funding Source</th><td>{{ student.source_of_fund }}</td></tr>
+  </table>
+
+  <h3>Assigned Equipment</h3>
+  <table class="four-cols">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Serial No</th>
+        <th>Assigned On</th>
+        <th>Assigned By</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for eq in assigned_equipment %}
+      <tr>
+        <td>{{ eq.name }}</td>
+        <td>{{ eq.serial_number }}</td>
+        <td>{{ eq.assigned_date.strftime('%d-%b-%Y %H:%M') if eq.assigned_date else '—' }}</td>
+        <td>{{ eq.assigned_by or '—' }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="4">No equipment assigned.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</br>
+<br>
+<br>
+  <div class="signatures">
+    <div class="signature-box">
+      <p>Student Signature</p>
+    </div>
+    <div class="signature-box">
+      <p>Lab In-Charge Signature</p>
+    </div>
+  </div>
+
+</body>
+</html>

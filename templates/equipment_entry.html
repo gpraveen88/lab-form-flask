@@ -1,20 +1,16 @@
-{% extends layout %}
+{% extends "login_home.html" %}
 {% block title %}Equipment Entry{% endblock %}
 {% block content %}
 
 <div class="max-w-4xl mx-auto px-4 py-4">
   <header class="bg-pink-100 rounded-md shadow-sm p-4 text-center">
-    <div class="flex flex-col items-center justify-center space-y-2">
-      <h1 class="text-xl sm:text-2xl font-semibold text-blue-700" style="text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);">
-        Equipment Entry
-      </h1>
-    </div>
+    <h1 class="text-xl sm:text-2xl font-semibold text-blue-700">Equipment Entry</h1>
   </header>
 </div>
 
 {% with messages = get_flashed_messages() %}
   {% if messages %}
-    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
+    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6 text-center">
       {{ messages[0] }}
     </div>
   {% endif %}
@@ -44,7 +40,14 @@
 
   <div><label>Manufacturer</label><input type="text" name="manufacturer" required class="input"></div>
   <div><label>Model</label><input type="text" name="model" required class="input"></div>
-  <div><label>Serial Number</label><input type="text" name="serial_number" required class="input"></div>
+
+  <div>
+    <label>Quantity</label>
+    <input type="number" name="quantity" id="quantity" required min="1" class="input">
+  </div>
+
+  <div id="serial-number-container" class="mt-4"></div>
+
   <div><label>Invoice Number</label><input type="text" name="invoice_number" class="input"></div>
   <div><label>Cost per Unit</label><input type="number" name="cost_per_unit" step="0.01" class="input"></div>
   <div><label>Warranty Expiry</label><input type="date" name="warranty_expiry" class="input"></div>
@@ -52,8 +55,6 @@
   <div><label>Purchase Date</label><input type="date" name="purchase_date" required class="input"></div>
   <div><label>PO Date</label><input type="date" name="po_date" required class="input"></div>
   <div><label>Intender Name</label><input type="text" name="intender_name" required class="input"></div>
-  <div><label>Quantity</label><input type="number" name="quantity" required min="1" class="input"></div>
-  <!-- <div><label>Department Code</label><input type="text" name="department_code" class="input"></div> -->
 
   <div>
     <label>Status</label>
@@ -69,6 +70,16 @@
     </select>
   </div>
 
+  <div>
+    <label class="block font-semibold text-sm mb-1">Assign to Student</label>
+    <select name="assigned_to_roll" class="w-full border p-2 rounded mb-4">
+      <option value="">-- Not Assigned --</option>
+      {% for student in students %}
+        <option value="{{ student.roll }}">{{ student.roll }} - {{ student.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
   <div class="text-center">
     <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">Submit</button>
   </div>
@@ -78,5 +89,34 @@
   label { display:block; font-weight: 600; margin-bottom: 4px; }
   .input { width: 100%; padding: 8px 12px; border: 1px solid #cbd5e0; border-radius: 6px; }
 </style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const quantityInput = document.getElementById("quantity");
+  const serialContainer = document.getElementById("serial-number-container");
+
+  quantityInput.addEventListener("input", function () {
+    const qty = parseInt(this.value);
+    serialContainer.innerHTML = "";
+
+    if (qty > 0) {
+      const label = document.createElement("label");
+      label.textContent = "Enter Serial Numbers";
+      label.classList.add("block", "font-semibold", "text-sm", "mb-2");
+      serialContainer.appendChild(label);
+
+      for (let i = 1; i <= qty; i++) {
+        const input = document.createElement("input");
+        input.type = "text";
+        input.name = `serial_number_${i}`;
+        input.placeholder = `Serial Number ${i}`;
+        input.required = true;
+        input.className = "input mb-2";
+        serialContainer.appendChild(input);
+      }
+    }
+  });
+});
+</script>
 
 {% endblock %}

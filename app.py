@@ -4,9 +4,18 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask import Flask, render_template, request
 from models import db, User, Workstation, Equipment, ProvisioningRequest
 import pandas as pd
+import os
+from datetime import date
+
+
+from dotenv import load_dotenv
+load_dotenv()  # Load environment variables from .env file
+print("🔐 ENV Secret Key:", os.getenv("SECRET_KEY"))
+
+
 
 import requests
-import os
+
 from collections import defaultdict
 from werkzeug.security import check_password_hash
 from flask_sqlalchemy import SQLAlchemy
@@ -14,13 +23,19 @@ from flask_migrate import Migrate
 from datetime import datetime, timedelta
 import secrets
 from flask import flash, redirect, url_for
+from flask import flash, redirect, url_for
 
 app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'database.db')
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'database.db')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
-app.secret_key = "PPPAAA@RRRTTT"
+# app.secret_key = "PPPAAA@RRRTTT"
+
+
+app.secret_key = os.getenv("SECRET_KEY")
+
 
 
 #db = SQLAlchemy(app)
@@ -39,8 +54,8 @@ def load_user(user_id):
 
 with app.app_context():
     db.create_all()
-
-GOOGLE_SHEET_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbwQiFsBus3K7wJkSqLtHeeeMvZFr2TObboA0v85D3BfhP4xUKYY8Qi7CFpGv04tYz_n/exec"
+GOOGLE_SHEET_WEBHOOK_URL = os.getenv("GOOGLE_SHEET_WEBHOOK_URL")
+# GOOGLE_SHEET_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbwQiFsBus3K7wJkSqLtHeeeMvZFr2TObboA0v85D3BfhP4xUKYY8Qi7CFpGv04tYz_n/exec"
 
 def send_to_google_sheet(data):
     try:
@@ -489,13 +504,21 @@ def about_us():
     return render_template('about_us.html') 
 
 
+# @app.route("/logout")
+# @login_required
+# def logout():
+#     logout_user()
+#     #flash("You have been logged out.")
+#     return redirect(url_for("login"))
+
+from flask import session
+
 @app.route("/logout")
 @login_required
 def logout():
     logout_user()
-    #flash("You have been logged out.")
+    session.clear()  # 🔁 Clears all session data
     return redirect(url_for("login"))
-
 
 @app.route("/reset-request", methods=["GET", "POST"])
 def reset_request():
@@ -640,59 +663,67 @@ from datetime import datetime
 from flask import request, render_template, redirect, url_for, flash
 from flask_login import login_required
 
+from flask import render_template, request, redirect, url_for, flash
+from flask_login import login_required
+from datetime import date
+from models import db, Equipment, Workstation
 
 @app.route("/equipment_entry", methods=["GET", "POST"])
 @login_required
 def equipment_entry():
     if request.method == "POST":
-        form = request.form
+        name = request.form["name"]
+        category = request.form["category"]
+        manufacturer = request.form["manufacturer"]
+        model = request.form["model"]
+        invoice_number = request.form.get("invoice_number")
+        cost_per_unit = request.form.get("cost_per_unit", type=float)
+        warranty_expiry = request.form.get("warranty_expiry")
+        location = request.form["location"]
+        purchase_date = request.form["purchase_date"]
+        status = request.form["status"]
+        po_date = request.form["po_date"]
+        intender_name = request.form["intender_name"]
+        quantity = request.form.get("quantity", type=int)
+        assigned_to_roll = request.form.get("assigned_to_roll")
 
-        name = form["name"]
-        category = form["category"]
-        manufacturer = form["manufacturer"]
-        model = form["model"]
-        serial_number = form["serial_number"]
-        invoice_number = form.get("invoice_number", "")
-        cost_per_unit = float(form.get("cost_per_unit", 0))  # safe default
-        warranty_expiry = form.get("warranty_expiry", "")
-        location = form["location"]
-        purchase_date = form["purchase_date"]
-        status = form["status"]
-        po_date = form["po_date"]
-        intender_name = form["intender_name"]
-        quantity = int(form["quantity"])
+        today = date.today()
+        date_str = today.strftime("%Y-%m-%d")
+        current_count = Equipment.query.filter_by(category=category).count()
 
-        # Generate department code
-        today_str = datetime.now().strftime("%Y%m%d")
-        prefix = f"CSE/{today_str}/{category}"
-        existing = Equipment.query.filter(Equipment.department_code.like(f"{prefix}/%")).count()
-        department_code = f"{prefix}/{str(existing + 1).zfill(3)}"
+        for i in range(quantity):
+            serial_number = request.form.get(f"serial_number_{i+1}")
+            serial = f"{current_count + i + 1:03}"
+            department_code = f"CSE/{date_str}/{category}/{serial}"
 
-        # Create new record
-        new_equipment = Equipment(
-            name=name,
-            category=category,
-            manufacturer=manufacturer,
-            model=model,
-            serial_number=serial_number,
-            invoice_number=invoice_number,
-            cost_per_unit=cost_per_unit,
-            warranty_expiry=warranty_expiry,
-            location=location,
-            purchase_date=purchase_date,
-            status=status,
-            po_date=po_date,
-            intender_name=intender_name,
-            quantity=quantity,
-            department_code=department_code
-        )
+            equipment = Equipment(
+                name=name,
+                category=category,
+                manufacturer=manufacturer,
+                model=model,
+                serial_number=serial_number,
+                invoice_number=invoice_number,
+                cost_per_unit=cost_per_unit,
+                warranty_expiry=warranty_expiry,
+                location=location,
+                purchase_date=purchase_date,
+                status=status,
+                po_date=po_date,
+                intender_name=intender_name,
+                quantity=1,  # each entry represents one unit
+                department_code=department_code,
+                assigned_to_roll=assigned_to_roll if assigned_to_roll else None
+            )
+            db.session.add(equipment)
 
-        db.session.add(new_equipment)
         db.session.commit()
-        flash(f"✅ Equipment added. Code: {department_code}")
-        return redirect(url_for("equipment_entry"))
+        flash(f"{quantity} equipment entries added successfully.", "success")
+        return redirect(url_for("equipment_list"))
 
-    return render_template("equipment_entry.html", layout="login_home.html")
+    students = Workstation.query.all()
+    return render_template("equipment_entry.html", students=students)
+
+
 
 
 from flask import send_file
@@ -703,11 +734,44 @@ from models import Equipment
 from flask import request, render_template
 from sqlalchemy import or_
 
+# @app.route("/equipment_list", methods=["GET"])
+# def equipment_list():
+#     search_query = request.args.get('search', '').strip()
+#     if search_query:
+#         equipment = Equipment.query.filter(
+#             or_(
+#                 Equipment.name.ilike(f"%{search_query}%"),
+#                 Equipment.category.ilike(f"%{search_query}%"),
+#                 Equipment.status.ilike(f"%{search_query}%"),
+#                 Equipment.department_code.ilike(f"%{search_query}%"),
+#                 Equipment.intender_name.ilike(f"%{search_query}%"),
+#                 Equipment.model.ilike(f"%{search_query}%"),
+#                 Equipment.location.ilike(f"%{search_query}%"),
+#                 Equipment.manufacturer.ilike(f"%{search_query}%"),
+#                 Equipment.serial_number.ilike(f"%{search_query}%"),
+#                 Equipment.po_date.ilike(f"%{search_query}%"),
+#                 Equipment.purchase_date.ilike(f"%{search_query}%")
+#             )
+#         ).all()
+#     else:
+#         equipment = Equipment.query.all()
+#     return render_template("equipment_list.html", equipment=equipment)
+
+from flask import request, render_template
+from sqlalchemy import or_
+
+
 @app.route("/equipment_list", methods=["GET"])
 def equipment_list():
     search_query = request.args.get('search', '').strip()
+    status_filter = request.args.get('status_filter', '').strip()
+    page = request.args.get('page', 1, type=int)
+    per_page = 10  # Adjust as needed
+
+    query = Equipment.query
+
     if search_query:
-        equipment = Equipment.query.filter(
+        query = query.filter(
             or_(
                 Equipment.name.ilike(f"%{search_query}%"),
                 Equipment.category.ilike(f"%{search_query}%"),
@@ -721,10 +785,49 @@ def equipment_list():
                 Equipment.po_date.ilike(f"%{search_query}%"),
                 Equipment.purchase_date.ilike(f"%{search_query}%")
             )
-        ).all()
-    else:
-        equipment = Equipment.query.all()
-    return render_template("equipment_list.html", equipment=equipment)
+        )
+
+    if status_filter:
+        query = query.filter(Equipment.status == status_filter)
+
+    pagination = query.order_by(Equipment.id.desc()).paginate(page=page, per_page=per_page)
+    
+    return render_template("equipment_list.html",
+                           equipment=pagination.items,
+                           pagination=pagination,
+                           search_query=search_query,
+                           status_filter=status_filter)
+
+@app.route("/assign_equipment/<int:equipment_id>", methods=["GET", "POST"])
+@login_required
+def assign_equipment(equipment_id):
+    equipment = Equipment.query.get_or_404(equipment_id)
+    students = Workstation.query.all()
+
+    if request.method == "POST":
+        selected_roll = request.form.get("assigned_to_roll")
+
+        if selected_roll:
+            student = Workstation.query.filter_by(roll=selected_roll).first()
+            if not student:
+                flash("Invalid student selected.", "danger")
+                return redirect(url_for("assign_equipment", equipment_id=equipment_id))
+
+            # Direct assignment or reassignment
+            equipment.assigned_to_roll = selected_roll
+            equipment.status = "Issued"
+            db.session.commit()
+            flash(f"Equipment '{equipment.name}' assigned to {student.name} ({student.roll})", "success")
+        else:
+            # Unassignment
+            equipment.assigned_to_roll = None
+            equipment.status = "Available"
+            db.session.commit()
+            flash(f"Equipment '{equipment.name}' is now unassigned.", "info")
+
+        return redirect(url_for("equipment_list"))
+
+    return render_template("assign_equipment.html", equipment=equipment, students=students)
 
 
 
@@ -919,12 +1022,53 @@ def lab_details(lab_code):
     )
 
 
-@app.route("/student/<roll>")
+@app.route("/student/<string:roll>", methods=["GET", "POST"])
 @login_required
 def student_details(roll):
     student = Workstation.query.filter_by(roll=roll).first_or_404()
 
-    return render_template("student_details.html", student=student)
+    # Equipment assigned to this student
+    assigned_equipment = Equipment.query.filter_by(assigned_to_roll=roll).all()
+
+    # Unassigned equipment for dropdown
+    unassigned_equipment = Equipment.query.filter_by(assigned_to_roll=None).all()
+
+    return render_template("student_details.html",
+                           student=student,
+                           assigned_equipment=assigned_equipment,
+                           unassigned_equipment=unassigned_equipment)
+
+
+from datetime import datetime
+from flask_login import current_user
+
+@app.route("/assign_equipment_to_student/<string:roll>", methods=["POST"])
+@login_required
+def assign_equipment_to_student(roll):
+    student = Workstation.query.filter_by(roll=roll).first_or_404()
+    equipment_id = request.form.get("equipment_id")
+
+    if not equipment_id:
+        flash("Please select equipment.", "warning")
+        return redirect(url_for('student_details', roll=roll))
+
+    equipment = Equipment.query.get_or_404(equipment_id)
+
+    # ❌ Block reassignment
+    if equipment.assigned_to_roll:
+        flash("⚠️ Equipment already assigned and cannot be reassigned.", "danger")
+        return redirect(url_for('student_details', roll=roll))
+
+    # ✅ Set tracking values properly
+    equipment.assigned_to_roll = roll
+    equipment.assigned_date = datetime.utcnow()
+    equipment.assigned_by = current_user.email
+
+    db.session.commit()
+
+    flash(f"✅ Equipment '{equipment.name}' assigned to {student.name}", "success")
+    return redirect(url_for('student_details', roll=roll))
+
 
 
 
@@ -1093,12 +1237,20 @@ def edit_equipment(id):
 
     return render_template('edit_equipment.html', item=item)
 
-@app.route('/equipment/delete/<int:id>', methods=['GET'])
+@app.route('/equipment/delete/<int:id>', methods=['POST'])
 def delete_equipment(id):
-    item = Equipment.query.get_or_404(id)
-    db.session.delete(item)
+    equipment = Equipment.query.get_or_404(id)
+    
+    # If equipment is assigned, optionally restrict deletion
+    if equipment.student:
+        flash("Cannot delete equipment that is currently assigned to a student.", "error")
+        return redirect(url_for('equipment_list'))
+
+    db.session.delete(equipment)
     db.session.commit()
+    flash("Equipment deleted successfully.", "success")
     return redirect(url_for('equipment_list'))
+
 
 @app.route("/inventory_search", methods=["GET"])
 @login_required
@@ -1119,6 +1271,45 @@ def inventory_search():
     equipment_list = query.all()
 
     return render_template("inventory_search.html", equipment_list=equipment_list)
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template("errors/404.html"), 404
+
+@app.errorhandler(403)
+def forbidden(e):
+    return render_template("errors/403.html"), 403
+
+@app.errorhandler(500)
+def internal_error(e):
+    return render_template("errors/500.html"), 500
+
+from flask import make_response, render_template
+from weasyprint import HTML
+
+from flask import render_template, make_response
+import pdfkit
+
+@app.route('/generate_equipment_pdf/<int:student_id>')
+def generate_equipment_pdf(student_id):
+    student = Workstation.query.get_or_404(student_id)
+    # assigned_equipment = Equipment.query.filter_by(assigned_to=student_id).all()
+    # assigned_equipment = Equipment.query.filter_by(assigned_to_id=student_id).all()
+    assigned_equipment = Equipment.query.filter_by(assigned_to_roll=student.roll).all()
+
+    # Use the same template that renders the HTML view
+    rendered = render_template('pdf_student.html', student=student, assigned_equipment=assigned_equipment)
+
+    # Convert to PDF using WeasyPrint
+    from weasyprint import HTML
+    pdf_file = HTML(string=rendered).write_pdf()
+
+    response = make_response(pdf_file)
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = f'inline; filename=Student_{student.roll}_Details.pdf'
+    return response
+
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0",debug=True, port=5006)
